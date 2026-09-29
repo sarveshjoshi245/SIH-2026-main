@@ -72,7 +72,28 @@ app.get('/config.js', (req, res) => {
 // Lets ONE public web service expose all 5 services. No extra dependencies:
 // uses the global fetch available in Node 18+. Only active paths are proxied;
 // local multi-port development is unaffected.
+// Department pages use root-relative asset paths (/css/…, /js/…, /api/…)
+// and build the portal origin as hostname:portalPort. Under the /dept-*
+// subpath proxies those would hit the portal root or a localhost port, so
+// rewrite them to stay inside the department's proxy prefix and to use
+// window.location.origin (same-origin = the portal on Render) instead.
+function rewriteDeptBody(text, prefix) {
+  // HTML: root-relative assets/links (but not protocol-relative //…).
+  text = text.replace(/(href|src|action)="(\/[^/])/g, `$1="${prefix}$2`);
+  // JS + HTML: department's own API calls -> stay inside its proxy prefix.
+  text = text.replace(/(['"`])\/api\//g, `$1${prefix}/api/`);
+  // JS: portal origin builders (all 3 dept apps share this pattern).
+  text = text.split('`${window.location.protocol}//${window.location.hostname}:${port}`').join('window.location.origin');
+  text = text.split('`${window.location.protocol}//${window.location.hostname}:${SAMANVAY_PORTAL_PORT}`').join('window.location.origin');
+  // HTML/JS: hard-coded localhost links -> same-origin / dept prefixes.
+  text = text.split('http://localhost:5001').join('').split('http://127.0.0.1:5001').join('');
+  text = text.split('http://localhost:4000').join('/dept-land').split('http://127.0.0.1:4000').join('/dept-land');
+  text = text.split('http://localhost:8001').join('/dept-electricity').split('http://127.0.0.1:8001').join('/dept-electricity');
+  text = text.split('http://localhost:4002').join('/dept-pollution').split('http://127.0.0.1:4002').join('/dept-pollution');
+  return text;
+}
 async function proxyTo(req, res, targetBase, stripPrefix) {
+  const isDept = stripPrefix.startsWith('/dept-');
   try {
     const suffix = req.originalUrl.slice(stripPrefix.length) || '/';
     const target = `${targetBase}${suffix.startsWith('/') ? suffix : `/${suffix}`}`;
@@ -87,9 +108,13 @@ async function proxyTo(req, res, targetBase, stripPrefix) {
       body: hasBody ? JSON.stringify(req.body) : undefined,
       redirect: 'manual',
     });
-    const buf = Buffer.from(await upstream.arrayBuffer());
-    const ct = upstream.headers.get('content-type');
+    const ct = upstream.headers.get('content-type') || '';
     if (ct) res.set('content-type', ct);
+    const buf = Buffer.from(await upstream.arrayBuffer());
+    if (isDept && (ct.includes('text/html') || ct.includes('javascript') || /\.js(\?|$)/.test(suffix))) {
+      res.status(upstream.status).send(rewriteDeptBody(buf.toString('utf8'), stripPrefix));
+      return;
+    }
     res.status(upstream.status).send(buf);
   } catch (err) {
     res.status(502).json({ success: false, message: `Internal service unavailable: ${err.message}`, retryable: true });
