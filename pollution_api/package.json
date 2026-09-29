@@ -1,0 +1,16 @@
+{
+  "name": "pollution-department-api",
+  "version": "1.0.0",
+  "description": "Simulated legacy Pollution/Environment Department API for the SIH Government Interoperability Layer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.23.0"
+  }
+}

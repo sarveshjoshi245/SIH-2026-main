@@ -1,0 +1,36 @@
+{
+  "_about": "Single source of truth for local development ports. Every service reads its own port (and the other services' addresses) from this file, and start-all.js checks and starts them. All local runs bind to 'host' only (127.0.0.1), never 0.0.0.0. 'health' is each service's existing identity endpoint; its JSON 'service' field must equal 'expect'.",
+  "host": "127.0.0.1",
+  "services": {
+    "portal": {
+      "port": 5001,
+      "dir": "server",
+      "health": "/api/health",
+      "expect": "Government Interoperability Platform Core"
+    },
+    "interop": {
+      "port": 8000,
+      "dir": "interop_backend",
+      "health": "/health",
+      "expect": "INTEROPERABILITY_PLATFORM_BACKEND"
+    },
+    "electricity": {
+      "port": 8001,
+      "dir": "electricity_department_api",
+      "health": "/health",
+      "expect": "ELECTRICITY_DISTRIBUTION_DEPARTMENT"
+    },
+    "land": {
+      "port": 4000,
+      "dir": "land_api",
+      "health": "/api/land/info",
+      "expect": "Land Records Department API (simulated)"
+    },
+    "pollution": {
+      "port": 4002,
+      "dir": "pollution_api",
+      "health": "/api/info",
+      "expect": "Pollution / Environment Department API (simulated)"
+    }
+  }
+}

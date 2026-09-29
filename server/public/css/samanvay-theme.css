@@ -1,0 +1,465 @@
+/* ==========================================================================
+   Samanvay shared theme — loaded on every page AFTER gov-style.css.
+   Adds: base type scale (18px), GIGW utility bar, shared footer, 44px tap
+   targets, colour + icon + text status indicators, wizard progress strip,
+   consistent primary-action placement. Additive only: it never relies on
+   element IDs changing, and dashboard.html's scripts are untouched.
+   ========================================================================== */
+
+:root {
+  --sv-navy: #1e3a8a;
+  --sv-navy-deep: #0f172a;
+  --sv-blue: #1d4ed8;
+  --sv-text: #0f172a;
+  --sv-muted: #475569;
+  --sv-border: #cbd5e1;
+  --sv-ok: #166534;
+  --sv-ok-bg: #dcfce7;
+  --sv-wait: #92400e;
+  --sv-wait-bg: #fef3c7;
+  --sv-bad: #991b1b;
+  --sv-bad-bg: #fee2e2;
+  --sv-focus: #f59e0b;
+  --sv-tap: 44px;
+  --sv-font: "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial,
+             "Nirmala UI", "Noto Sans Devanagari", "Mangal", sans-serif;
+}
+
+/* ---------- Base type: 18px default, user-adjustable via the utility bar -- */
+html { font-size: 112.5%; }                 /* 18px */
+html[data-text-size="small"] { font-size: 100%; }   /* 16px — never smaller */
+html[data-text-size="large"] { font-size: 125%; }   /* 20px */
+
+body {
+  font-family: var(--sv-font);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--sv-text);
+  background: #f8fafc;
+}
+html[lang="mr"] body { line-height: 1.75; }
+
+/* Readable minimums for the small helper text classes used across pages */
+.form-label { font-size: 0.95rem; }
+.brand-title p,
+.auth-header p,
+.dash-title-section p { font-size: 0.95rem; }
+.gov-top-bar { font-size: 0.85rem; }
+.status-tag, .status-badge, .dept-badge { font-size: 0.8rem; }
+.fc-node-desc { font-size: 0.9rem; }
+.stepper-label { font-size: 0.85rem; }
+.stepper-sublabel { font-size: 0.8rem; }
+.sidebar-item { font-size: 0.95rem; }
+.sidebar-group-label { font-size: 0.78rem; color: #64748b; }
+.gov-table { font-size: 0.92rem; }
+#permissionForm .form-group p { font-size: 0.85rem !important; color: #475569 !important; }
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 3px solid var(--sv-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Skip link ------------------------------------------------------ */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -200px;
+  z-index: 1000;
+  background: var(--sv-navy-deep);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: var(--sv-tap);
+  display: inline-flex;
+  align-items: center;
+}
+.skip-link:focus { top: 8px; }
+.skip-target { display: block; height: 0; overflow: hidden; }
+.skip-target:focus { outline: none; }
+
+/* ---------- GIGW utility bar (identical on every page) -------------------- */
+.gigw-bar {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+  color: #334155;
+}
+.gigw-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 2px clamp(12px, 3vw, 32px);
+}
+.gigw-bar__gov { font-weight: 600; }
+.gigw-bar__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.gigw-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.gigw-group__label { margin-right: 4px; }
+.gigw-bar button {
+  min-width: var(--sv-tap);
+  min-height: var(--sv-tap);
+  padding: 0 10px;
+  border: 1px solid var(--sv-border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--sv-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.gigw-bar button:hover { border-color: var(--sv-navy); }
+.gigw-bar button[aria-pressed="true"] {
+  background: var(--sv-navy);
+  border-color: var(--sv-navy);
+  color: #fff;
+}
+
+/* ---------- Header (shared structure) ------------------------------------- */
+.main-header { flex-wrap: wrap; gap: 12px; }
+.header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- Tap targets: 44 x 44 minimum ---------------------------------- */
+.btn,
+.sidebar-item,
+.sidebar-subgroup-toggle,
+.top-tab,
+.auth-tab-btn,
+.form-input,
+select {
+  min-height: var(--sv-tap);
+}
+.btn, .top-tab, .auth-tab-btn { min-width: var(--sv-tap); }
+.gov-top-bar a,
+.site-footer a,
+.auth-body a,
+.header-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sv-tap);
+  min-width: var(--sv-tap);
+}
+.gov-top-bar { padding-top: 0; padding-bottom: 0; flex-wrap: wrap; gap: 0 12px; }
+/* Radio "cards" in the permission wizard */
+#permissionForm label:has(> input[type="radio"]) { min-height: var(--sv-tap); }
+/* Include / exclude checkboxes in the clearance checklist */
+input.quick-decision-service {
+  width: var(--sv-tap) !important;
+  height: var(--sv-tap) !important;
+  accent-color: var(--sv-blue);
+  margin: 0;
+}
+
+/* ---------- Status indicators: colour + icon + text, never colour alone --- */
+.status-tag.status-approved::before,
+.status-badge.status-approved::before,
+.status-tag.status-pending::before,
+.status-badge.status-pending::before,
+.status-tag.status-waiting::before,
+.status-tag.status-blocked::before,
+.status-badge.is-locked::before {
+  display: inline-block;
+  margin-right: 0.35em;
+  font-weight: 800;
+}
+.status-tag.status-approved::before,
+.status-badge.status-approved::before { content: "\2713"; content: "\2713" / ""; }       /* ✓ */
+.status-tag.status-pending::before,
+.status-badge.status-pending::before { content: "\25D4"; content: "\25D4" / ""; }        /* ◔ in progress */
+.status-tag.status-waiting::before { content: "\25CB"; content: "\25CB" / ""; }          /* ○ not started */
+.status-tag.status-blocked::before { content: "\2715"; content: "\2715" / ""; }          /* ✕ */
+.status-badge.is-locked::before { content: "\1F512"; content: "\1F512" / ""; }           /* 🔒 */
+.status-badge.is-locked { background: #f1f5f9 !important; color: #334155 !important; }
+.status-tag.status-waiting { color: #334155; }
+
+/* Circuit status text in System Tools (JS only changes its inline colour) */
+#cbLand::before, #cbElec::before, #cbPoll::before {
+  margin-right: 0.35em;
+  content: "\2713"; content: "\2713" / "";
+}
+#cbLand[style*="220, 38, 38"]::before,
+#cbElec[style*="220, 38, 38"]::before,
+#cbPoll[style*="220, 38, 38"]::before,
+#cbLand[style*="dc2626"]::before,
+#cbElec[style*="dc2626"]::before,
+#cbPoll[style*="dc2626"]::before { content: "\26A0"; content: "\26A0" / ""; }
+
+/* Feedback alert on the dashboard: error state gets a warning icon */
+#fbAlert[style*="254, 226, 226"]::before,
+#fbAlert[style*="fee2e2"]::before { content: "\26A0\FE0F  "; }
+
+/* Alert boxes on login / register pages */
+.sv-alert-icon { margin-right: 0.4em; font-weight: 800; }
+
+/* Aadhaar / PAN check results on the register page */
+.verify-badge { font-size: 0.85rem; }
+.verify-valid::before { content: "\2713"; content: "\2713" / ""; font-weight: 800; }
+.verify-invalid::before { content: "\2717"; content: "\2717" / ""; font-weight: 800; }
+
+/* ---------- Consistent primary-action placement ---------------------------
+   Rule used on every page: in a row of actions the primary button is the
+   LAST (right-most) item; in a single-column form it is full width at the
+   bottom. `.action-row` enforces the order without moving DOM nodes.        */
+.action-row { justify-content: flex-end; flex-wrap: wrap; }
+.action-row .btn-primary,
+.action-row .btn-hero-primary { order: 2; }
+#feedbackForm button[type="submit"] { width: 100%; }
+
+/* ---------- Wizard progress strip (CSS-only: reads the form's own state) -- */
+.wizard-progress {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.wizard-progress__title {
+  font-weight: 700;
+  color: var(--sv-navy);
+  margin-bottom: 10px;
+}
+.wizard-progress__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.wp-step {
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  font-size: 0.9rem;
+}
+.wp-step__num { display: block; font-weight: 800; color: var(--sv-navy); }
+.wp-step__name { display: block; color: #334155; }
+.wp-state { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.82rem; }
+.wp-state--todo { color: #475569; }
+.wp-state--todo::before { content: "\25CB"; content: "\25CB" / ""; }
+.wp-state--done { display: none; color: var(--sv-ok); }
+.wp-state--done::before { content: "\2713"; content: "\2713" / ""; }
+
+#section-process:has(#q1_project_type:valid):has(#q2_industry_type:valid):has(#q3_location_district:valid) .wp-step[data-step="1"],
+#section-process:has(input[name="q4_land_required"]:checked):has(#q5_land_owned:valid):has(input[name="q6_land_area"]:checked) .wp-step[data-step="2"],
+#section-process:has(input[name="q7_electricity_required"]:checked):has(#q8_electricity_load:valid) .wp-step[data-step="3"],
+#section-process:has(input[name="q9_emissions"]:checked):has(input[name="q10_hazwaste"]:checked) .wp-step[data-step="4"] {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+#section-process:has(#q1_project_type:valid):has(#q2_industry_type:valid):has(#q3_location_district:valid) .wp-step[data-step="1"] .wp-state--todo,
+#section-process:has(input[name="q4_land_required"]:checked):has(#q5_land_owned:valid):has(input[name="q6_land_area"]:checked) .wp-step[data-step="2"] .wp-state--todo,
+#section-process:has(input[name="q7_electricity_required"]:checked):has(#q8_electricity_load:valid) .wp-step[data-step="3"] .wp-state--todo,
+#section-process:has(input[name="q9_emissions"]:checked):has(input[name="q10_hazwaste"]:checked) .wp-step[data-step="4"] .wp-state--todo { display: none; }
+#section-process:has(#q1_project_type:valid):has(#q2_industry_type:valid):has(#q3_location_district:valid) .wp-step[data-step="1"] .wp-state--done,
+#section-process:has(input[name="q4_land_required"]:checked):has(#q5_land_owned:valid):has(input[name="q6_land_area"]:checked) .wp-step[data-step="2"] .wp-state--done,
+#section-process:has(input[name="q7_electricity_required"]:checked):has(#q8_electricity_load:valid) .wp-step[data-step="3"] .wp-state--done,
+#section-process:has(input[name="q9_emissions"]:checked):has(input[name="q10_hazwaste"]:checked) .wp-step[data-step="4"] .wp-state--done { display: inline-flex; }
+
+/* Step label that replaces the old "Part N" eyebrow in each wizard section */
+.wizard-step-label { color: #334155 !important; font-size: 0.85rem !important; }
+
+/* Plain-language helper under technical fields */
+.field-help { display: block; font-size: 0.85rem; color: #475569; font-weight: 400; margin-top: 2px; }
+
+/* ---------- Shared footer (identical on every page) ----------------------- */
+.site-footer {
+  background: var(--sv-navy-deep);
+  color: #cbd5e1;
+  border-top: 3px solid #f97316;
+  padding: 16px clamp(16px, 4vw, 32px);
+  text-align: center;
+  font-size: 0.92rem;
+  margin-top: 32px;
+}
+.site-footer p { margin: 2px 0; }
+.site-footer a { color: #fff; font-weight: 700; justify-content: center; padding: 0 4px; }
+.site-footer__meta { color: #94a3b8; font-size: 0.85rem; }
+
+/* ---------- Landing page pieces that now live in the shared header -------- */
+.landing-main { display: block; }
+
+/* ---------- Main navigation + "Find a service" (same on every page) ------
+   GIGW pattern: a short top-level menu and a visible search/finder. The
+   finder is a plain GET form to /dashboard.html?tab=… , which the dashboard
+   already understands — no script involved.                                 */
+.sv-nav {
+  background: var(--sv-navy);
+  color: #fff;
+  border-bottom: 3px solid #f97316;
+}
+.sv-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  padding: 4px clamp(12px, 3vw, 32px);
+}
+.sv-nav__list { list-style: none; display: flex; flex-wrap: wrap; gap: 2px; margin: 0; padding: 0; }
+.sv-nav__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sv-tap);
+  padding: 0 14px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+}
+.sv-nav__list a:hover { background: rgba(255, 255, 255, 0.14); text-decoration: underline; }
+.sv-search { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; }
+.sv-search__label { font-weight: 700; color: #fff; }
+.sv-search__label::before { content: "\1F50D"; content: "\1F50D" / ""; margin-right: 0.35em; }
+.sv-search__select {
+  min-height: var(--sv-tap);
+  min-width: 14rem;
+  border-radius: 6px;
+  border: 1px solid #fff;
+  padding: 0 10px;
+  font: inherit;
+  color: var(--sv-text);
+  background: #fff;
+}
+.sv-search__btn { background: #f97316; border-color: #f97316; color: #111827; font-weight: 800; }
+.sv-search__btn:hover { background: #fb923c; }
+
+/* ---------- Landing hero photo --------------------------------------------- */
+.hero--photo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 48px);
+  align-items: center;
+  text-align: left;
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+.hero--photo h1, .hero--photo .hero-desc { margin-left: 0; }
+.hero--photo .hero-actions { justify-content: flex-start; }
+.hero-figure { margin: 0; }
+.hero-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 40%;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+.hero-figure figcaption { font-size: 0.8rem; color: var(--sv-muted); margin-top: 6px; }
+.hero-figure figcaption strong { color: var(--sv-text); }
+.hero-figure figcaption a { color: var(--sv-blue); }
+@media (max-width: 860px) {
+  .hero--photo { grid-template-columns: 1fr; text-align: center; }
+  .hero--photo h1, .hero--photo .hero-desc { margin-left: auto; }
+  .hero--photo .hero-actions { justify-content: center; }
+}
+
+/* ---------- Landing "how it works": Stage 1 / Stage 2 grouping ------------ */
+.flow-stage { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.flow-stage__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--sv-navy);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 2px 12px;
+}
+
+/* ---------- Dashboard approval path: waves ----------------------------------
+   The wave a department belongs to is shown by the frame it sits in. The
+   page script re-applies wave-1 / wave-2 classes to nodes after a check, so
+   those classes must not change a node's look here.                         */
+.fc-wave {
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px 14px;
+  background: #fff;
+}
+.fc-wave__label { text-align: center; font-weight: 700; color: var(--sv-navy); margin: 0 0 10px; }
+.fc-wave .fc-node.wave-1,
+.fc-wave .fc-node.wave-2 { background: #fff; }
+.fc-wave .fc-node.approved-stage { background: #f0fdf4; }
+.fc-gate {
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+}
+.fc-gate::before { content: "\23F8"; content: "\23F8" / ""; margin-right: 0.35em; }
+@media (max-width: 720px) {
+  .flowchart-tier-row { flex-direction: column; align-items: stretch; }
+  .fc-node { max-width: none !important; }
+}
+
+/* ---------- Status legend ----------------------------------------------------
+   Each state keeps its own colour + icon + words. "Waiting for Stage 1" and
+   "Department system not responding" are different states and look different
+   here; see the report for why the live badge cannot yet tell them apart.   */
+.sv-legend { font-size: 0.9rem; }
+.sv-legend h3 { font-size: 0.95rem; color: var(--sv-navy); margin: 0 0 8px; }
+.sv-legend dl {
+  display: grid;
+  grid-template-columns: minmax(9rem, max-content) 1fr;
+  gap: 8px 14px;
+  margin: 0 0 16px;
+  align-items: start;
+}
+.sv-legend dd { margin: 0; color: #334155; }
+.sv-legend .status-tag { white-space: nowrap; }
+.sv-legend__reasons { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.sv-legend__reasons li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.sv-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.sv-state--blocked { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+.sv-state--blocked::before { content: "\23F8"; content: "\23F8" / ""; }
+.sv-state--down { background: var(--sv-bad-bg); color: var(--sv-bad); border: 1px solid #fca5a5; }
+.sv-state--down::before { content: "\26A0"; content: "\26A0" / ""; }
+@media (max-width: 560px) { .sv-legend dl { grid-template-columns: 1fr; } }
+
+/* ---------- Track view: department order ---------------------------------- */
+.sv-waves {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+.sv-waves__title { font-weight: 700; color: var(--sv-navy); margin: 0 0 8px; }
+.sv-waves__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sv-waves__stage { font-weight: 800; color: var(--sv-navy); min-width: 5.5rem; }
+.sv-waves__dept { border: 1px solid var(--sv-border); border-radius: 6px; padding: 2px 10px; background: #f8fafc; font-weight: 600; }
+.sv-waves__note { color: var(--sv-muted); font-size: 0.85rem; }
+.sv-waves__arrow { color: var(--sv-muted); margin: 4px 0 4px 1.5rem; }
+.sv-waves__text { margin: 8px 0 0; font-size: 0.85rem; color: #334155; }
+
+/* ---------- Small screens -------------------------------------------------- */
+@media (max-width: 720px) {
+  .wizard-progress__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gov-top-bar { padding-left: 12px; padding-right: 12px; }
+  .main-header { padding-left: 12px; padding-right: 12px; }
+  .action-row { justify-content: stretch; }
+  .action-row > .btn { flex: 1 1 100%; }
+}

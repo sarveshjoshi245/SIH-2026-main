@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: samanvay-single
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: SINGLE_SERVICE
+        value: 1
+      # Optional: uncomment to use Postgres instead of SQLite (recommended for real use).
+      # - key: DATABASE_URL
+      #   fromDatabase:
+      #     name: samanvay-db
+      #     property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+# databases:
+#   - name: samanvay-db
+#     plan: free

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboard New Department & Schema Studio — Samanvay Portal</title>
+  <link rel="stylesheet" href="/css/gov-style.css">
+  <link rel="stylesheet" href="/css/samanvay-theme.css" data-ui-added>
+  <link rel="stylesheet" href="/css/samanvay-design.css" data-ui-added>
+  <script src="/js/i18n-strings.js" defer data-ui-added></script>
+  <script src="/js/i18n.js" defer data-ui-added></script>
+  <style>
+    .studio-container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .studio-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .studio-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .studio-card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .schema-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 0.88rem;
+    }
+    .schema-table th {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 10px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #cbd5e1;
+    }
+    .schema-table td {
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .confidence-badge {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: inline-block;
+    }
+    .json-editor-box {
+      font-family: monospace;
+      font-size: 0.88rem;
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 14px;
+      border-radius: 8px;
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid #334155;
+      resize: vertical;
+    }
+    .badge-sector {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tricolor-stripe" aria-hidden="true" data-ui-added></div>
+
+  <!-- Shared utility bar -->
+  <a class="skip-link" href="#main-content" data-ui-added>Skip to main content</a>
+  <div class="gigw-bar" data-ui-added>
+    <div class="gigw-bar__inner">
+      <span class="gigw-bar__gov">Samanvay — Dynamic Department Onboarding & Interoperability Schema Mapper</span>
+      <div class="gigw-bar__controls">
+        <div class="gigw-group" role="group" aria-label="Text size">
+          <span class="gigw-group__label">Text size</span>
+          <button type="button" data-text-size="small" aria-pressed="false" translate="no">A−</button>
+          <button type="button" data-text-size="normal" aria-pressed="true" translate="no">A</button>
+          <button type="button" data-text-size="large" aria-pressed="false" translate="no">A+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gov-top-bar">
+    <div>
+      <strong translate="no">Samanvay System Studio</strong> • <span>Onboard New Department</span>
+    </div>
+    <div>
+      <a href="/dashboard.html">🏠 Samanvay Dashboard</a> | <a href="/admin.html">⚙️ Department Admin Panel</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="brand-wrapper">
+      <div class="emblem-icon">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="#1e3a8a" />
+          <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933" />
+          <rect x="11" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="18.5" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="26" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808" />
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1 translate="no">Department Onboarding & Schema Studio</h1>
+        <p>Register new government departments and automatically generate interoperability schema mappings</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="/dashboard.html" class="btn btn-outline">⬅️ Return to Dashboard</a>
+    </div>
+  </header>
+
+  <main class="studio-container">
+    <span id="main-content" class="skip-target" tabindex="-1"></span>
+
+    <!-- ALERT BANNER -->
+    <div id="statusAlert" style="display: none; padding: 14px; border-radius: 8px; margin-bottom: 20px; font-weight: 700;"></div>
+
+    <!-- ONBOARDING FORM -->
+    <div class="studio-card">
+      <div class="studio-card-header">
+        <div class="studio-card-title">
+          <span>🏢 Step 1: Department Basic Information</span>
+        </div>
+        <span class="status-tag status-approved">Live System Auto-Sync</span>
+      </div>
+
+      <form id="deptForm" onsubmit="handleRegisterDepartment(event)">
+        <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="deptName">Department Name <span class="req-star">*</span></label>
+            <input type="text" id="deptName" class="form-input" placeholder="e.g. Maharashtra Water Supply Board (MWRB)" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="deptCode">Department Code / ID <span class="req-star">*</span></label>
+            <input type="text" id="deptCode" class="form-input" placeholder="e.g. WATER" style="text-transform: uppercase;" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="category">Sector / Category <span class="req-star">*</span></label>
+            <select id="category" class="form-input" required>
+              <option value="Utilities & Water">Utilities & Water</option>
+              <option value="Fire & Safety Clearance">Fire & Safety Clearance</option>
+              <option value="Forest & Environment">Forest & Environment</option>
+              <option value="Labor & Factory Inspectorate">Labor & Factory Inspectorate</option>
+              <option value="Taxation & Excise">Taxation & Excise</option>
+              <option value="Municipal Approvals">Municipal Approvals</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="endpointUrl">Department Portal URL / Endpoint <span class="req-star">*</span></label>
+            <input type="text" id="endpointUrl" class="form-input" placeholder="e.g. http://localhost:4003" value="http://localhost:4003" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="apiPort">API Port Number</label>
+            <input type="number" id="apiPort" class="form-input" placeholder="e.g. 4003" value="4003">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="serviceName">Clearance Service Name <span class="req-star">*</span></label>
+            <input type="text" id="serviceName" class="form-input" placeholder="e.g. Industrial Water Connection & Discharge Approval" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 14px;">
+          <label class="form-label" for="description">Department Description & Scope</label>
+          <input type="text" id="description" class="form-input" placeholder="Brief description of clearances issued by this department">
+        </div>
+
+        <!-- STEP 2: AI SCHEMA MAPPER STUDIO -->
+        <div style="margin-top: 28px; border-top: 2px dashed #cbd5e1; padding-top: 24px;">
+          <div class="studio-card-title" style="margin-bottom: 12px; color: #166534;">
+            <span>🤖 Step 2: Automatic AI Schema Mapper</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 14px;">
+            Paste a sample JSON payload or field list from the new department API below. The AI Interoperability Engine will automatically match its data fields to Samanvay core schema fields.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="sampleJson">Sample Department API Payload (JSON / Key-Value)</label>
+            <textarea id="sampleJson" class="json-editor-box">{
+  "consumer_pan": "ABCDE1234F",
+  "applicant_firm_name": "ABC Industries Pvt Ltd",
+  "water_sanction_kl": 500,
+  "connection_status": "SANCTIONED",
+  "district_zone": "Pune",
+  "sanction_valid_date": "2027-12-31"
+}</textarea>
+          </div>
+
+          <div style="margin-top: 12px; display: flex; gap: 10px;">
+            <button type="button" class="btn btn-primary" onclick="generateAutoSchema()" style="background: #15803d; border-color: #15803d;">
+              ⚡ Auto-Generate Schema Mappings (AI Engine)
+            </button>
+            <button type="button" class="btn btn-outline" onclick="loadSampleTemplate('fire')">
+              📋 Load Fire Safety Template
+            </button>
+            <button type="button" class="btn btn-outline" onclick="loadSampleTemplate('water')">
+              💧 Load Water Dept Template
+            </button>
+          </div>
+
+          <!-- GENERATED SCHEMA MAPPINGS TABLE -->
+          <div id="schemaMappingWrapper" style="margin-top: 20px; display: none;">
+            <div style="font-weight: 700; color: #1e3a8a; margin-bottom: 8px;">
+              Generated Schema Mappings for Interoperability Engine:
+            </div>
+            <table class="schema-table">
+              <thead>
+                <tr>
+                  <th>Department Field</th>
+                  <th>Mapped Samanvay Field</th>
+                  <th>Transformation Logic</th>
+                  <th>AI Confidence</th>
+                </tr>
+              </thead>
+              <tbody id="generatedSchemaBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- STEP 3: SUBMIT -->
+        <div style="margin-top: 28px; text-align: right; border-top: 2px solid #e2e8f0; padding-top: 20px;">
+          <button type="submit" id="btnRegisterDept" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem; font-weight: 800;">
+            🚀 Onboard Department & Activate Schema Mapping ➔
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- REGISTERED DEPARTMENTS LIST & SCHEMAS -->
+    <div class="studio-card">
+      <div class="studio-card-header">
+        <div class="studio-card-title">
+          <span>🗄️ Active Department Registry & System Mappings</span>
+        </div>
+        <button type="button" class="btn btn-outline" onclick="loadDepartmentRegistry()" style="font-size: 0.8rem; padding: 6px 12px;">
+          🔄 Refresh Registry
+        </button>
+      </div>
+
+      <div id="registryListContainer">
+        <div style="text-align: center; padding: 20px; color: #64748b;">Loading registered departments…</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentGeneratedMappings = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      generateAutoSchema();
+      loadDepartmentRegistry();
+    });
+
+    function loadSampleTemplate(type) {
+      const codeEl = document.getElementById('deptCode');
+      const nameEl = document.getElementById('deptName');
+      const catEl = document.getElementById('category');
+      const portEl = document.getElementById('apiPort');
+      const urlEl = document.getElementById('endpointUrl');
+      const serviceEl = document.getElementById('serviceName');
+      const descEl = document.getElementById('description');
+      const jsonEl = document.getElementById('sampleJson');
+
+      if (type === 'fire') {
+        codeEl.value = 'FIRE';
+        nameEl.value = 'Fire & Emergency Services Directorate';
+        catEl.value = 'Fire & Safety Clearance';
+        portEl.value = '4004';
+        urlEl.value = 'http://localhost:4004';
+        serviceEl.value = 'NOC Fire Safety Certificate & Hydrant Inspection';
+        descEl.value = 'Issues Fire Safety No-Objection Certificate (NOC) for industrial plants.';
+        jsonEl.value = JSON.stringify({
+          "establishment_pan": "ABCDE1234F",
+          "facility_name": "ABC Industries Pvt Ltd",
+          "fire_noc_status": "APPROVED",
+          "valid_until_date": "2027-06-30",
+          "location_district": "Pune"
+        }, null, 2);
+      } else {
+        codeEl.value = 'WATER';
+        nameEl.value = 'Maharashtra Industrial Water Supply Board (MWRB)';
+        catEl.value = 'Utilities & Water';
+        portEl.value = '4003';
+        urlEl.value = 'http://localhost:4003';
+        serviceEl.value = 'Industrial Water Allocation & Effluent Discharge Clearance';
+        descEl.value = 'Provides bulk industrial water connection quota and drainage consent.';
+        jsonEl.value = JSON.stringify({
+          "consumer_pan": "ABCDE1234F",
+          "applicant_firm_name": "ABC Industries Pvt Ltd",
+          "water_sanction_kl": 500,
+          "connection_status": "SANCTIONED",
+          "district_zone": "Pune",
+          "sanction_valid_date": "2027-12-31"
+        }, null, 2);
+      }
+      generateAutoSchema();
+    }
+
+    async function generateAutoSchema() {
+      const rawText = document.getElementById('sampleJson').value.trim();
+      const deptCode = document.getElementById('deptCode').value.trim() || 'NEW_DEPT';
+      const wrapper = document.getElementById('schemaMappingWrapper');
+      const tbody = document.getElementById('generatedSchemaBody');
+
+      try {
+        const res = await fetch('/api/admin/departments/auto-map-schema', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ samplePayload: rawText, deptCode })
+        });
+        const data = await res.json();
+
+        if (data.success && data.suggestions) {
+          currentGeneratedMappings = data.suggestions;
+          tbody.innerHTML = data.suggestions.map((m, idx) => `
+            <tr>
+              <td><code style="color: #c2410c; font-weight: 700;">${m.dept_field}</code></td>
+              <td>
+                <select onchange="updateMappingField(${idx}, this.value)" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 700;">
+                  <option value="organization_pan" ${m.samanvay_field === 'organization_pan' ? 'selected' : ''}>organization_pan</option>
+                  <option value="applicant_name" ${m.samanvay_field === 'applicant_name' ? 'selected' : ''}>applicant_name</option>
+                  <option value="clearance_status" ${m.samanvay_field === 'clearance_status' ? 'selected' : ''}>clearance_status</option>
+                  <option value="valid_until" ${m.samanvay_field === 'valid_until' ? 'selected' : ''}>valid_until</option>
+                  <option value="sanctioned_capacity" ${m.samanvay_field === 'sanctioned_capacity' ? 'selected' : ''}>sanctioned_capacity</option>
+                  <option value="survey_number" ${m.samanvay_field === 'survey_number' ? 'selected' : ''}>survey_number</option>
+                  <option value="location_district" ${m.samanvay_field === 'location_district' ? 'selected' : ''}>location_district</option>
+                  <option value="additional_metadata" ${m.samanvay_field === 'additional_metadata' ? 'selected' : ''}>additional_metadata</option>
+                </select>
+              </td>
+              <td><span style="color: #334155; font-weight: 600;">${m.transformation_rule}</span></td>
+              <td><span class="confidence-badge">AI Confidence: ${m.confidence}%</span></td>
+            </tr>
+          `).join('');
+          wrapper.style.display = 'block';
+        }
+      } catch (err) {
+        console.warn('Auto map schema error:', err);
+      }
+    }
+
+    function updateMappingField(idx, val) {
+      if (currentGeneratedMappings[idx]) {
+        currentGeneratedMappings[idx].samanvay_field = val;
+      }
+    }
+
+    async function handleRegisterDepartment(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnRegisterDept');
+      btn.disabled = true;
+      btn.innerText = 'Registering Department & Syncing Schema…';
+
+      const alertBox = document.getElementById('statusAlert');
+      alertBox.style.display = 'none';
+
+      const payload = {
+        deptName: document.getElementById('deptName').value.trim(),
+        deptCode: document.getElementById('deptCode').value.trim().toUpperCase(),
+        category: document.getElementById('category').value,
+        endpointUrl: document.getElementById('endpointUrl').value.trim(),
+        apiPort: document.getElementById('apiPort').value.trim(),
+        serviceName: document.getElementById('serviceName').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        mappings: currentGeneratedMappings
+      };
+
+      try {
+        const res = await fetch('/api/admin/departments/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = '🚀 Onboard Department & Activate Schema Mapping ➔';
+
+        if (data.success) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#dcfce7';
+          alertBox.style.color = '#15803d';
+          alertBox.style.border = '1px solid #86efac';
+          alertBox.innerHTML = `✓ Success! Department <strong>${payload.deptName} (${payload.deptCode})</strong> onboarded and synced across Samanvay system!`;
+          loadDepartmentRegistry();
+        } else {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#fee2e2';
+          alertBox.style.color = '#991b1b';
+          alertBox.style.border = '1px solid #fca5a5';
+          alertBox.innerHTML = `⚠️ Registration failed: ${data.message}`;
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = '🚀 Onboard Department & Activate Schema Mapping ➔';
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#fee2e2';
+        alertBox.style.color = '#991b1b';
+        alertBox.innerHTML = `⚠️ Network error: ${err.message}`;
+      }
+    }
+
+    async function loadDepartmentRegistry() {
+      const container = document.getElementById('registryListContainer');
+      try {
+        const res = await fetch('/api/admin/departments');
+        const data = await res.json();
+
+        if (data.success && data.departments) {
+          const depts = data.departments;
+          const mappings = data.mappings || [];
+
+          container.innerHTML = depts.map(d => {
+            const deptMaps = mappings.filter(m => m.dept_code.toUpperCase() === d.dept_code.toUpperCase());
+            return `
+              <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span class="badge-sector">${d.category}</span>
+                    <h3 style="margin-top: 6px; color: #1e3a8a; font-size: 1.1rem;">${d.dept_name} (${d.dept_code})</h3>
+                    <div style="font-size: 0.85rem; color: #475569; margin-top: 4px;"><strong>Service:</strong> ${d.service_name}</div>
+                    <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">Endpoint: <code>${d.endpoint_url}</code> (Port ${d.api_port})</div>
+                  </div>
+                  <span class="status-tag status-approved">ACTIVE INTEGRATION</span>
+                </div>
+
+                <div style="margin-top: 14px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px;">
+                  <div style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 8px;">Active Interoperability Schema Mappings (${deptMaps.length}):</div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    ${deptMaps.map(m => `
+                      <span style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 0.78rem; padding: 4px 8px; border-radius: 4px; font-weight: 600;">
+                        <code>${m.dept_field}</code> ➔ <code style="color: #166534;">${m.samanvay_field}</code> (${m.transformation_rule})
+                      </span>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="color: #dc3545;">Failed to load registry: ${err.message}</div>`;
+      }
+    }
+  </script>
+</body>
+
+</html>

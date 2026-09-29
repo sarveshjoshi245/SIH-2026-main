@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वीज वितरण विभाग — नवीन वीज जोडणी पोर्टल | Electricity Distribution Department (demo)</title>
+  <meta name="description" content="Simulated Electricity Distribution Department portal for the Samanvay SIH 2026 prototype: new connection status, consumer lookup, load and supply guide, application register and new connection application.">
+  <link rel="stylesheet" href="/css/electricity-style.css">
+  <script src="/samanvay-config.js"></script>
+</head>
+<body>
+
+  <div class="mb-tricolor"></div>
+
+  <!-- Top bar -->
+  <div class="mb-topbar no-print">
+    <div>
+      <strong>वीज वितरण विभाग</strong> • Electricity Distribution Department
+      <span class="pt-demo-tag">DEMO · सिम्युलेटेड पोर्टल (SIH 2026)</span>
+    </div>
+    <div>
+      <a href="#mainContent">मुख्य मजकुराकडे जा (Skip to Main)</a> |
+      <a href="#" onclick="document.body.style.fontSize='90%'; return false;">A-</a>
+      <a href="#" onclick="document.body.style.fontSize='100%'; return false;">A</a>
+      <a href="#" onclick="document.body.style.fontSize='110%'; return false;">A+</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="mb-header no-print">
+    <div class="mb-header-brand">
+      <div class="mb-emblem">⚡</div>
+      <div class="mb-header-titles">
+        <h1>वीज वितरण विभाग — नवीन वीज जोडणी पोर्टल</h1>
+        <p>Electricity Distribution Department • New Connection &amp; Load Sanction Portal</p>
+      </div>
+    </div>
+    <div class="mb-header-badge">
+      <span>ई-सेवा (e-Services)</span>
+      नवीन जोडणी • भार मंजुरी • ग्राहक तपशील
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="mb-nav no-print">
+    <a href="#" id="nav-track" class="active" onclick="switchTab('track'); return false;">📋 अर्ज स्थिती (Application Status)</a>
+    <a href="#" id="nav-consumer" onclick="switchTab('consumer'); return false;">🔌 ग्राहक तपशील (Consumer Connection)</a>
+    <a href="#" id="nav-guide" onclick="switchTab('guide'); return false;">⚖️ भार व पुरवठा प्रकार (Load &amp; Supply Guide)</a>
+    <a href="#" id="nav-register" onclick="switchTab('register'); return false;">🗂️ अर्ज नोंदवही (Application Register)</a>
+    <a href="#" id="nav-apply" onclick="switchTab('apply'); return false;">✍️ नवीन जोडणी अर्ज (Apply)</a>
+  </nav>
+
+  <main class="mb-container" id="mainContent">
+
+    <!-- Zone picker -->
+    <div class="mb-division-box no-print">
+      <div class="mb-division-title">📍 परिमंडळ निवडा (Select Distribution Zone)</div>
+      <div class="mb-division-subtitle">तुमचा अर्ज किंवा जोडणी पाहण्यासाठी संबंधित परिमंडळावर क्लिक करा (Click the zone your premises are in):</div>
+      <div class="mb-division-grid" id="zoneGrid"></div>
+    </div>
+
+    <!-- TAB 1: Application status -->
+    <section id="section-track">
+      <div class="mb-card no-print">
+        <div class="mb-card-header">
+          <span>🔍 नवीन जोडणी अर्ज शोध (Search New Connection Application)</span>
+          <span style="font-size: 0.82rem; color: #555;">अर्ज क्रमांक / ग्राहक क्रमांक / पॅन / नाव</span>
+        </div>
+        <div class="mb-card-body">
+          <div style="margin-bottom: 10px; font-size: 0.85rem; font-weight: 700; color: var(--mb-maroon);">⚡ प्रात्यक्षिक उदाहरणे (Quick Demo Presets):</div>
+          <div class="mb-presets">
+            <span class="mb-pill" onclick="presetTrack('ELEC-2026-00101')">ELEC-2026-00101 (ABC Industries · चाकण · वीजपुरवठा सुरू)</span>
+            <span class="mb-pill" onclick="presetTrack('ELEC-2026-00102')">ELEC-2026-00102 (XYZ Manufacturing · स्थळ तपासणी प्रलंबित)</span>
+            <span class="mb-pill" onclick="presetTrack('ELEC-2026-00103')">ELEC-2026-00103 (DEF Industries · थकबाकी प्रलंबित)</span>
+            <span class="mb-pill" onclick="presetTrack('ELEC-2026-00104')">ELEC-2026-00104 (RST Industries · नामंजूर)</span>
+            <span class="mb-pill" onclick="presetTrack('ELEC-2026-00106')">ELEC-2026-00106 (PQR Industries · तपासणी सुरू)</span>
+          </div>
+
+          <div class="mb-grid-4">
+            <div class="mb-form-group">
+              <label class="mb-label" for="selDistrict">मंडळ / जिल्हा (Circle / District)</label>
+              <select id="selDistrict" class="mb-select" onchange="onDistrictChange()"></select>
+            </div>
+            <div class="mb-form-group">
+              <label class="mb-label" for="selTaluka">विभाग / तालुका (Division / Taluka)</label>
+              <select id="selTaluka" class="mb-select"></select>
+            </div>
+          </div>
+
+          <div class="mb-radio-group" role="radiogroup" aria-label="Search by">
+            <label class="mb-radio-label"><input type="radio" name="trackType" value="application" checked> अर्ज क्रमांक (Application No)</label>
+            <label class="mb-radio-label"><input type="radio" name="trackType" value="consumer"> ग्राहक क्रमांक (Consumer No)</label>
+            <label class="mb-radio-label"><input type="radio" name="trackType" value="pan"> पॅन क्रमांक (PAN)</label>
+            <label class="mb-radio-label"><input type="radio" name="trackType" value="name"> अर्जदाराचे नाव (Applicant Name)</label>
+          </div>
+
+          <form id="trackForm" onsubmit="handleTrack(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="mb-form-group" style="flex: 1; min-width: 240px;">
+                <label class="mb-label" for="trackQuery">शोध मजकूर (Enter Query) <span class="req">*</span></label>
+                <input type="text" id="trackQuery" class="mb-input" placeholder="उदा. ELEC-2026-00101 किंवा ABCDE1234F" required>
+              </div>
+              <button type="submit" class="mb-btn mb-btn-primary" id="btnTrack" style="height: 42px;">🔎 स्थिती पहा (Check Status)</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="resultTrack"></div>
+    </section>
+
+    <!-- TAB 2: Consumer connection -->
+    <section id="section-consumer" style="display: none;">
+      <div class="mb-card no-print">
+        <div class="mb-card-header"><span>🔌 विद्यमान ग्राहक जोडणी तपशील (Existing Consumer Connection)</span></div>
+        <div class="mb-card-body">
+          <div class="mb-presets">
+            <span class="mb-pill" onclick="presetConsumer('consumer','CONS-778899')">CONS-778899 (HT · 500 kW)</span>
+            <span class="mb-pill" onclick="presetConsumer('consumer','CONS-552211')">CONS-552211 (LT · थकबाकी)</span>
+            <span class="mb-pill" onclick="presetConsumer('pan','ABCDE1234F')">PAN ABCDE1234F (सर्व जोडण्या)</span>
+          </div>
+          <div class="mb-radio-group" role="radiogroup" aria-label="Search by">
+            <label class="mb-radio-label"><input type="radio" name="consType" value="consumer" checked> ग्राहक क्रमांक (Consumer No)</label>
+            <label class="mb-radio-label"><input type="radio" name="consType" value="pan"> पॅन (PAN)</label>
+            <label class="mb-radio-label"><input type="radio" name="consType" value="meter"> मीटर क्रमांक (Meter No)</label>
+          </div>
+          <form onsubmit="handleConsumer(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="mb-form-group" style="flex: 1; min-width: 240px;">
+                <label class="mb-label" for="consQuery">क्रमांक प्रविष्ट करा (Enter number) <span class="req">*</span></label>
+                <input type="text" id="consQuery" class="mb-input" placeholder="उदा. CONS-778899" required>
+              </div>
+              <button type="submit" class="mb-btn mb-btn-primary" style="height: 42px;">🔎 तपशील पहा (Show Details)</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="resultConsumer"></div>
+    </section>
+
+    <!-- TAB 3: Load & supply guide -->
+    <section id="section-guide" style="display: none;">
+      <div class="mb-card">
+        <div class="mb-card-header"><span>⚖️ भार व पुरवठा प्रकार मार्गदर्शक (Load &amp; Supply Category Guide)</span></div>
+        <div class="mb-card-body">
+          <p style="font-size: 0.9rem; color: var(--mb-text-muted); margin-bottom: 14px;">
+            तुम्हाला किती वीजभार हवा आहे ते टाका — कोणत्या प्रकारची जोडणी लागेल व कोणती कागदपत्रे लागतील ते दिसेल.
+            (Enter the load you need to see the connection type and documents required.)
+          </p>
+          <form onsubmit="handleGuide(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="mb-form-group" style="min-width: 220px;">
+                <label class="mb-label" for="guideLoad">आवश्यक भार kW मध्ये (Required load in kW) <span class="req">*</span></label>
+                <input type="number" min="1" step="1" id="guideLoad" class="mb-input" value="300" required>
+              </div>
+              <button type="submit" class="mb-btn mb-btn-primary" style="height: 42px;">📐 प्रकार तपासा (Check Category)</button>
+            </div>
+          </form>
+          <div id="resultGuide"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Register -->
+    <section id="section-register" style="display: none;">
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <span>🗂️ नवीन जोडणी अर्ज नोंदवही (New Connection Application Register)</span>
+          <button class="mb-btn mb-btn-outline" onclick="loadRegister()" style="padding: 4px 12px; font-size: 0.8rem;">🔄 रीफ्रेश (Refresh)</button>
+        </div>
+        <div class="mb-card-body" id="resultRegister"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Apply -->
+    <section id="section-apply" style="display: none;">
+      <div id="samanvayHandoff" class="mb-handoff" hidden>
+        <div class="mb-handoff-title">🔗 समन्वय मधून आलात (Opened from Samanvay)</div>
+        <ol class="mb-handoff-steps">
+          <li class="done">✓ जमीन पायरी पूर्ण (Land step complete)</li>
+          <li class="done">✓ तुमची माहिती आधीच भरली आहे (Your details are pre-filled)</li>
+          <li class="current">➔ खालील वीज जोडणी अर्ज तपासा व दाखल करा (Check and submit the electricity application below)</li>
+          <li>समन्वय कडे परत जा — पुढची पायरी: प्रदूषण नियंत्रण (Return to Samanvay — next step: Pollution Control)</li>
+        </ol>
+        <div id="samanvayProfileMsg" class="mb-handoff-msg"></div>
+      </div>
+
+      <div class="mb-card">
+        <div class="mb-card-header"><span>✍️ नवीन औद्योगिक वीज जोडणी अर्ज (New Industrial Connection Application)</span></div>
+        <div class="mb-card-body">
+          <form id="applyForm" onsubmit="handleApply(event)">
+            <div class="mb-grid-2">
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyName">अर्जदार / उद्योगाचे नाव (Applicant / Enterprise Name) <span class="req">*</span></label>
+                <input type="text" id="applyName" class="mb-input" placeholder="उदा. ABC Industries Pvt Ltd" required>
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyPan">अर्जदार पॅन (Applicant PAN) <span class="req">*</span></label>
+                <input type="text" id="applyPan" class="mb-input" placeholder="उदा. ABCDE1234F" style="text-transform: uppercase;" maxlength="10" required>
+              </div>
+            </div>
+            <div class="mb-grid-4">
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyDistrict">जिल्हा (District)</label>
+                <input type="text" id="applyDistrict" class="mb-input" value="Pune">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyTaluka">तालुका (Taluka)</label>
+                <input type="text" id="applyTaluka" class="mb-input" value="Khed">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyVillage">गाव (Village)</label>
+                <input type="text" id="applyVillage" class="mb-input" value="Chakan">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label" for="applyLoad">आवश्यक भार kW (Required load kW) <span class="req">*</span></label>
+                <input type="number" min="1" step="1" id="applyLoad" class="mb-input" value="300" required oninput="showApplyCategory()">
+              </div>
+            </div>
+            <div class="mb-form-group" style="margin-bottom: 12px;">
+              <label class="mb-label" for="applyAddress">जागेचा पत्ता (Premises Address)</label>
+              <input type="text" id="applyAddress" class="mb-input" placeholder="उदा. प्लॉट क्र. B-12, MIDC चाकण">
+            </div>
+            <div id="applyCategory" class="pt-msg pt-msg--info"></div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+              <button type="submit" class="mb-btn mb-btn-primary" id="btnApply">📩 अर्ज दाखल करा (Submit Application)</button>
+            </div>
+          </form>
+          <div id="applyMsg"></div>
+
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mb-footer no-print">
+    <p><strong>वीज वितरण विभाग • Electricity Distribution Department</strong> — सिम्युलेटेड विभागीय पोर्टल (Simulated department portal)</p>
+    <p style="font-size: 0.78rem; color: #9aa8bd;">Smart India Hackathon 2026 prototype · सर्व नोंदी नमुना माहिती आहेत (All records are sample data)</p>
+    <p style="font-size: 0.75rem; margin-top: 8px;">Interoperability Gateway Connected • Integrated with Samanvay Single Window System</p>
+  </footer>
+
+  <script src="/js/electricity-app.js"></script>
+</body>
+</html>

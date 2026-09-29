@@ -1,0 +1,59 @@
+[
+  {
+    "ferfar_no": "1402",
+    "survey_number": "103",
+    "village": "Pirangut",
+    "taluka": "Mulshi",
+    "district": "Pune",
+    "mutation_type": "अकृषिक रूपांतरण व खरेदीखत नोंद (NA & Sale Deed)",
+    "applicant_name": "ABC Industries Pvt Ltd",
+    "previous_owner": "सुनीता विष्णू देशमुख",
+    "application_date": "2026-02-18",
+    "status": "PENDING_APPROVAL",
+    "status_mr": "प्रलंबित (तहसीलदार / मंडळ अधिकारी सुनावणी)",
+    "section_135d_notice": {
+      "notice_no": "MH-MUL-135D-2026-088",
+      "notice_date": "2026-02-20",
+      "expiry_date": "2026-03-07",
+      "details": "महाराष्ट्र जमीन महसूल संहिता १९६६ चे कलम १३५-ड अन्वये नोटीस: गट क्र. १०३ मधील ०६ हेक्टर २० आर क्षेत्राचे अकृषिक हस्तांतरण बाबत कोणाचीही हरकत असल्यास १५ दिवसात नोंदवावी."
+    }
+  },
+  {
+    "ferfar_no": "1290",
+    "survey_number": "101",
+    "village": "Wagholi",
+    "taluka": "Haveli",
+    "district": "Pune",
+    "mutation_type": "औद्योगिक अकृषिक अंतिम सनद नोंद (Final Industrial Sanad)",
+    "applicant_name": "ABC Industries Pvt Ltd",
+    "previous_owner": "शासकीय अकृषिक आदेश",
+    "application_date": "2025-11-01",
+    "status": "CERTIFIED",
+    "status_mr": "प्रमाणित (मंडळ अधिकारी वाघोली द्वारे मंजूर)",
+    "section_135d_notice": {
+      "notice_no": "MH-HAV-135D-2025-412",
+      "notice_date": "2025-11-02",
+      "expiry_date": "2025-11-17",
+      "details": "नोटीस कालावधी निर्वेध पूर्ण. कोणतीही हरकत प्राप्त न झाल्याने फेरफार प्रमाणित करण्यात आला."
+    }
+  },
+  {
+    "ferfar_no": "1018",
+    "survey_number": "105",
+    "village": "Karanjade",
+    "taluka": "Panvel",
+    "district": "Raigad",
+    "mutation_type": "बँक कर्ज बोजा नोंद (Bank Mortgage Entry)",
+    "applicant_name": "बँक ऑफ इंडिया, पनवेल",
+    "previous_owner": "Konkan Ventures LLP",
+    "application_date": "2025-10-01",
+    "status": "CERTIFIED",
+    "status_mr": "प्रमाणित (बोजा नोंद लागू)",
+    "section_135d_notice": {
+      "notice_no": "MH-PAN-135D-2025-190",
+      "notice_date": "2025-10-02",
+      "expiry_date": "2025-10-17",
+      "details": "बँक ऑफ इंडिया कर्ज बोजा नोंद रु. १.५ कोटी."
+    }
+  }
+]

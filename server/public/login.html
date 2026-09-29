@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="login.pageTitle">Log in — Samanvay Portal</title>
+  <link rel="stylesheet" href="/css/gov-style.css">
+  <link rel="stylesheet" href="/css/samanvay-theme.css" data-ui-added>
+  <link rel="stylesheet" href="/css/samanvay-design.css" data-ui-added>
+  <script src="/js/i18n-strings.js" defer data-ui-added></script>
+  <script src="/js/i18n.js" defer data-ui-added></script>
+  <style>
+    .account-type-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .account-type-btn {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .account-type-btn.active {
+      background: #ffffff;
+      color: #1e3a8a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="tricolor-stripe" aria-hidden="true" data-ui-added></div>
+
+  <!-- Samanvay shared utility bar (GIGW): skip link, text size, language -->
+  <a class="skip-link" href="#main-content" data-ui-added data-i18n="common.skip">Skip to main content</a>
+  <div class="gigw-bar" data-ui-added>
+    <div class="gigw-bar__inner">
+      <span class="gigw-bar__gov" data-i18n="common.govLine">Samanvay — one application for Land, Electricity and Pollution approvals</span>
+      <div class="gigw-bar__controls">
+        <div class="gigw-group" role="group" aria-label="Text size" data-i18n-aria-label="common.textSize">
+          <span class="gigw-group__label" data-i18n="common.textSize">Text size</span>
+          <button type="button" data-text-size="small" aria-pressed="false" aria-label="Smaller text" data-i18n-aria-label="common.textSmaller" translate="no">A−</button>
+          <button type="button" data-text-size="normal" aria-pressed="true" aria-label="Normal text" data-i18n-aria-label="common.textNormal" translate="no">A</button>
+          <button type="button" data-text-size="large" aria-pressed="false" aria-label="Larger text" data-i18n-aria-label="common.textLarger" translate="no">A+</button>
+        </div>
+        <div class="gigw-group" role="group" aria-label="Language" data-i18n-aria-label="common.language">
+          <button type="button" data-lang="en" lang="en" aria-pressed="true" translate="no">English</button>
+          <button type="button" data-lang="mr" lang="mr" aria-pressed="false" translate="no">मराठी</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gov-top-bar">
+    <div>
+      <strong translate="no">Samanvay</strong> • <span>Log in</span>
+    </div>
+    <div>
+      <a href="/" data-i18n="common.home">Home</a> | <a href="/register.html" data-i18n="common.register">New user? Register</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="brand-wrapper">
+      <div class="emblem-icon">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="#1e3a8a" />
+          <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933" />
+          <rect x="11" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="18.5" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="26" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808" />
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1 translate="no">Samanvay</h1>
+        <p data-i18n="common.brandSub">One application for Land, Electricity and Pollution approvals</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="/register.html" class="btn btn-outline" data-i18n="login.registerBtn">Register a new account</a>
+    </div>
+  </header>
+
+  <nav class="sv-nav" aria-label="Main menu" data-i18n-aria-label="nav.label" data-ui-added>
+    <div class="sv-nav__inner">
+      <ul class="sv-nav__list">
+        <li><a href="/" data-i18n="common.home">Home</a></li>
+        <li><a href="/dashboard.html?tab=process" data-i18n="nav.apply">Apply for approvals</a></li>
+        <li><a href="/dashboard.html?tab=status" data-i18n="dash.st.title">Track my application</a></li>
+        <li><a href="/dashboard.html?tab=query" data-i18n="dash.nav.groupHelp">Help and complaints</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="auth-page-container">
+    <span id="main-content" class="skip-target" tabindex="-1"></span>
+    <div class="auth-box">
+      <div class="auth-header">
+        <h2>Log in to Samanvay Portal</h2>
+        <p>Select account type (Company or Individual) and enter your credentials to access your dashboard.</p>
+      </div>
+
+      <div class="auth-body">
+
+        <!-- ACCOUNT TYPE SELECTION -->
+        <div class="account-type-tabs">
+          <button type="button" id="typeCompany" class="account-type-btn active" onclick="setAccountType('company')">
+            🏢 Company Account
+          </button>
+          <button type="button" id="typeIndividual" class="account-type-btn" onclick="setAccountType('individual')">
+            👤 Individual Account
+          </button>
+        </div>
+
+        <div id="loginAlert" role="alert" style="display:none; padding: 10px 14px; border-radius: 6px; font-size: 0.82rem; margin-bottom: 16px;"></div>
+
+        <!-- MAIN LOGIN FORM -->
+        <form id="loginForm">
+          
+          <!-- Individual Sub-Tabs (Aadhaar vs PAN) -->
+          <div id="individualSubTabs" class="auth-tabs" style="display: none; margin-bottom: 16px;">
+            <button type="button" id="tabAadhaar" class="auth-tab-btn active" onclick="switchIndividualIdType('aadhaar')">Aadhaar Number</button>
+            <button type="button" id="tabPan" class="auth-tab-btn" onclick="switchIndividualIdType('pan')">PAN Number</button>
+          </div>
+
+          <!-- Identifier Input Field -->
+          <div class="form-group">
+            <label id="inputLabel" class="form-label" for="loginIdentifier">
+              Company PAN Number <span class="req-star">*</span>
+            </label>
+            <input type="text" id="loginIdentifier" class="form-input" placeholder="Enter Company PAN (e.g. ABCDE1234F)" style="text-transform: uppercase;" required>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">
+              Account Password <span class="req-star">*</span>
+            </label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" required>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 14px;">
+            <button type="submit" id="btnLoginSubmit" class="btn btn-primary" style="flex: 2; padding: 12px;">
+              Log In to Portal ➔
+            </button>
+            <button type="button" id="btnRequestOtp" onclick="requestOtpLogin()" class="btn btn-outline" style="flex: 1; padding: 12px; font-size: 0.82rem;">
+              🔑 Request OTP
+            </button>
+          </div>
+
+        </form>
+
+        <!-- OTP Step 2 Form (Hidden Initially) -->
+        <form id="otpForm" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #1e40af; margin-bottom: 14px;">
+            OTP sent to registered mobile <strong id="maskedPhoneSpan">*****</strong>. Demo OTP: <code>654321</code>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="otpInput">Enter 6-digit OTP <span class="req-star">*</span></label>
+            <input type="text" id="otpInput" class="form-input" placeholder="6-digit OTP" inputmode="numeric" maxlength="6" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px; font-weight: 700;" required>
+          </div>
+
+          <div class="action-row" style="display: flex; gap: 10px;">
+            <button type="button" onclick="cancelOtp()" class="btn btn-outline" style="flex: 1;">Cancel</button>
+            <button type="submit" id="btnVerifyOtp" class="btn btn-primary" style="flex: 2;">Verify & Log In ➔</button>
+          </div>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.9rem; color: #64748b;">
+          Don’t have an account? <a href="/register.html" style="color: var(--gov-primary); font-weight: 600;">Register here</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentAccountType = 'company'; // 'company' or 'individual'
+    let currentIndividualIdType = 'aadhaar'; // 'aadhaar' or 'pan'
+    let currentTxnId = null;
+
+    const loginIdentifier = document.getElementById('loginIdentifier');
+    const loginPassword = document.getElementById('loginPassword');
+    const inputLabel = document.getElementById('inputLabel');
+    const loginAlert = document.getElementById('loginAlert');
+    const loginForm = document.getElementById('loginForm');
+    const otpForm = document.getElementById('otpForm');
+
+    function setAccountType(type) {
+      currentAccountType = type;
+      loginAlert.style.display = 'none';
+      otpForm.style.display = 'none';
+      loginForm.style.display = 'block';
+
+      const compBtn = document.getElementById('typeCompany');
+      const indBtn = document.getElementById('typeIndividual');
+      const indTabs = document.getElementById('individualSubTabs');
+
+      loginIdentifier.value = '';
+      loginPassword.value = '';
+
+      if (type === 'company') {
+        compBtn.classList.add('active');
+        indBtn.classList.remove('active');
+        indTabs.style.display = 'none';
+        inputLabel.innerHTML = 'Company PAN Number <span class="req-star">*</span>';
+        loginIdentifier.placeholder = 'Enter Company PAN (e.g. ABCDE1234F)';
+      } else {
+        indBtn.classList.add('active');
+        compBtn.classList.remove('active');
+        indTabs.style.display = 'flex';
+        switchIndividualIdType(currentIndividualIdType);
+      }
+    }
+
+    function switchIndividualIdType(idType) {
+      currentIndividualIdType = idType;
+      const tabAadh = document.getElementById('tabAadhaar');
+      const tabPan = document.getElementById('tabPan');
+
+      loginIdentifier.value = '';
+      loginPassword.value = '';
+
+      if (idType === 'aadhaar') {
+        tabAadh.classList.add('active');
+        tabPan.classList.remove('active');
+        inputLabel.innerHTML = '12-Digit Aadhaar Number <span class="req-star">*</span>';
+        loginIdentifier.placeholder = 'Enter registered Aadhaar (e.g. 1234-5678-9012)';
+      } else {
+        tabPan.classList.add('active');
+        tabAadh.classList.remove('active');
+        inputLabel.innerHTML = '10-Character PAN Number <span class="req-star">*</span>';
+        loginIdentifier.placeholder = 'Enter registered PAN (e.g. RMPTL1234F)';
+      }
+    }
+
+    // Password Login Handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginAlert.style.display = 'none';
+
+      const identifierValue = loginIdentifier.value.replace(/[\s-]/g, '');
+      const password = loginPassword.value.trim();
+      const btn = document.getElementById('btnLoginSubmit');
+
+      btn.disabled = true;
+      btn.innerText = 'Authenticating…';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accountType: currentAccountType,
+            identifierType: currentAccountType === 'company' ? 'pan' : currentIndividualIdType,
+            identifierValue: identifierValue,
+            password: password,
+            loginMode: 'password'
+          })
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = 'Log In to Portal ➔';
+
+        if (data.success) {
+          sessionStorage.setItem('gov_citizen', JSON.stringify(data.citizen));
+          sessionStorage.setItem('gov_token', data.token);
+
+          showAlert('success', 'Authentication successful! Taking you to your dashboard…');
+          setTimeout(() => { window.location.href = '/dashboard.html'; }, 600);
+        } else {
+          showAlert('error', data.message);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Log In to Portal ➔';
+        showAlert('error', 'Could not connect to the authentication server.');
+      }
+    });
+
+    // Request OTP Option
+    async function requestOtpLogin() {
+      loginAlert.style.display = 'none';
+      const identifierValue = loginIdentifier.value.replace(/[\s-]/g, '');
+      const btn = document.getElementById('btnRequestOtp');
+
+      btn.disabled = true;
+      btn.innerText = 'Sending OTP…';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accountType: currentAccountType,
+            identifierType: currentAccountType === 'company' ? 'pan' : currentIndividualIdType,
+            identifierValue: identifierValue,
+            loginMode: 'otp'
+          })
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = '🔑 Request OTP';
+
+        if (data.success) {
+          currentTxnId = data.txnId;
+          document.getElementById('maskedPhoneSpan').innerText = data.maskedPhone;
+          loginForm.style.display = 'none';
+          otpForm.style.display = 'block';
+        } else {
+          showAlert('error', data.message);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = '🔑 Request OTP';
+        showAlert('error', 'Could not send OTP.');
+      }
+    }
+
+    function cancelOtp() {
+      otpForm.style.display = 'none';
+      loginForm.style.display = 'block';
+    }
+
+    // OTP Verify Handler
+    otpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const otp = document.getElementById('otpInput').value.trim();
+      const btn = document.getElementById('btnVerifyOtp');
+      btn.disabled = true;
+      btn.innerText = 'Verifying…';
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ txnId: currentTxnId, otp: otp })
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = 'Verify & Log In ➔';
+
+        if (data.success) {
+          sessionStorage.setItem('gov_citizen', JSON.stringify(data.citizen));
+          sessionStorage.setItem('gov_token', data.token);
+
+          showAlert('success', 'Logged in via OTP! Redirecting…');
+          setTimeout(() => { window.location.href = '/dashboard.html'; }, 600);
+        } else {
+          showAlert('error', data.message);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Verify & Log In ➔';
+        showAlert('error', 'OTP verification failed.');
+      }
+    });
+
+    function showAlert(type, msg) {
+      loginAlert.style.display = 'block';
+      if (type === 'success') {
+        loginAlert.style.background = '#dcfce7';
+        loginAlert.style.color = '#15803d';
+        loginAlert.style.border = '1px solid #86efac';
+        loginAlert.innerHTML = '✓ ' + msg;
+      } else {
+        loginAlert.style.background = '#fee2e2';
+        loginAlert.style.color = '#991b1b';
+        loginAlert.style.border = '1px solid #fca5a5';
+        loginAlert.innerHTML = '⚠️ ' + msg;
+      }
+    }
+
+    // Set default on load
+    setAccountType('company');
+  </script>
+</body>
+
+</html>

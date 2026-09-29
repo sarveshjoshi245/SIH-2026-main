@@ -1,0 +1,387 @@
+/* ================================================================
+   DELHI POLLUTION CONTROL COMMITTEE (DPCC) / MPCB STYLESHEET
+   Government of Maharashtra · Environment & Forest Department
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --pol-green: #14422b;
+  --pol-green-dark: #0a2517;
+  --pol-emerald: #2e7d32;
+  --pol-emerald-light: #e8f5e9;
+  --pol-teal: #0d9488;
+  --pol-saffron: #ff9933;
+  --pol-bg: #f4f8f5;
+  --pol-surface: #ffffff;
+  --pol-border: #c8e6c9;
+  --pol-text: #1b2e23;
+  --pol-text-muted: #4f6e5c;
+  --pol-radius: 6px;
+  --pol-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --font-base: 'Mukta', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-base);
+  background: var(--pol-bg);
+  color: var(--pol-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TRICOLOR STRIPE */
+.pol-tricolor {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%);
+}
+
+/* TOP ACCESSIBILITY & GOV BAR */
+.pol-topbar {
+  background: #0d281a;
+  color: #e8f5e9;
+  font-size: 0.82rem;
+  padding: 6px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pol-topbar a {
+  color: #c8e6c9;
+  text-decoration: none;
+  margin: 0 4px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+.pol-topbar a:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* MAIN HEADER */
+.pol-header {
+  background: linear-gradient(135deg, #14422b 0%, #0a2517 100%);
+  color: #ffffff;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  position: relative;
+  border-bottom: 3px solid #81c784;
+}
+.pol-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.pol-emblem {
+  font-size: 2.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.pol-header-titles h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+.pol-header-titles p {
+  font-size: 0.88rem;
+  color: #a5d6a7;
+  margin-top: 2px;
+  font-weight: 500;
+}
+.pol-header-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(129, 199, 132, 0.5);
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.pol-header-badge span {
+  color: #81c784;
+  font-weight: 700;
+  display: block;
+}
+
+/* NAVIGATION TABS */
+.pol-nav {
+  background: #ffffff;
+  border-bottom: 2px solid var(--pol-border);
+  padding: 0 32px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.pol-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.pol-nav a:hover {
+  color: var(--pol-green);
+  background: #f0fdf4;
+}
+.pol-nav a.active {
+  color: var(--pol-green);
+  border-bottom-color: var(--pol-green);
+  background: #e8f5e9;
+  font-weight: 700;
+}
+
+/* MAIN CONTAINER */
+.pol-container {
+  max-width: 1240px;
+  width: 100%;
+  margin: 24px auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+/* CARDS */
+.pol-card {
+  background: #ffffff;
+  border: 1px solid var(--pol-border);
+  border-radius: var(--pol-radius);
+  box-shadow: var(--pol-shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.pol-card-header {
+  background: #f0fdf4;
+  border-bottom: 1px solid var(--pol-border);
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pol-green);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pol-card-body {
+  padding: 20px;
+}
+
+/* ALERT BANNER */
+.pol-alert-banner {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+  padding: 14px 20px;
+  border-radius: var(--pol-radius);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+/* FORM ELEMENTS */
+.pol-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.pol-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.pol-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pol-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--pol-text);
+}
+.pol-label .req { color: #dc2626; }
+.pol-select, .pol-input {
+  padding: 9px 12px;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--pol-radius);
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: #ffffff;
+  color: #1b2e23;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.pol-select:focus, .pol-input:focus {
+  border-color: var(--pol-green);
+  box-shadow: 0 0 0 3px rgba(20, 66, 43, 0.15);
+}
+
+/* BUTTONS */
+.pol-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: var(--pol-radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.pol-btn-primary {
+  background: var(--pol-green);
+  color: #ffffff;
+}
+.pol-btn-primary:hover {
+  background: var(--pol-green-dark);
+  box-shadow: 0 4px 12px rgba(20, 66, 43, 0.25);
+}
+.pol-btn-secondary {
+  background: #e2e8f0;
+  color: #334155;
+}
+.pol-btn-secondary:hover {
+  background: #cbd5e1;
+}
+.pol-btn-outline {
+  background: #ffffff;
+  border: 1px solid var(--pol-green);
+  color: var(--pol-green);
+}
+.pol-btn-outline:hover {
+  background: #f0fdf4;
+}
+
+/* PRESETS PILLS */
+.pol-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pol-pill {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #15803d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.pol-pill:hover {
+  background: #bbf7d0;
+  border-color: #86efac;
+}
+
+/* CERTIFICATE SHEET */
+.poll-sheet {
+  background: #ffffff;
+  border: 2px solid #14422b;
+  padding: 24px;
+  margin-top: 20px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+.poll-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: rgba(20, 66, 43, 0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Samanvay hand-off (return panel) ───────────────────── */
+.pol-handoff {
+  background: #eef6f1;
+  border: 1px solid #9cc9ae;
+  border-left: 5px solid var(--pol-green);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  color: var(--pol-text);
+}
+.pol-handoff[hidden] { display: none; }
+.pol-handoff-title { font-weight: 800; color: var(--pol-green-dark); margin-bottom: 8px; }
+.pol-handoff-return { margin-top: 14px; border-left-color: var(--pol-saffron); background: #fff8e7; border-color: #f0d38a; }
+.pol-handoff-return p { margin: 0 0 12px; font-size: 0.9rem; }
+
+.pol-btn-handoff {
+  background: #7b1113;
+  color: #ffffff;
+}
+.pol-btn-handoff:hover {
+  background: #5a0c0e;
+}
+.poll-header-sheet {
+  text-align: center;
+  border-bottom: 2px solid #14422b;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+.poll-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+}
+.poll-table th, .poll-table td {
+  border: 1px solid #14422b;
+  padding: 8px 10px;
+  vertical-align: top;
+}
+.poll-table th {
+  background: #f0fdf4;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* FOOTER */
+.pol-footer {
+  background: #0a2517;
+  color: #a5d6a7;
+  font-size: 0.82rem;
+  padding: 24px 32px;
+  text-align: center;
+  margin-top: auto;
+  border-top: 3px solid #81c784;
+}
+.pol-footer p { margin: 4px 0; }
+
+@media print {
+  .pol-topbar, .pol-header, .pol-nav, .pol-card, .pol-footer, .no-print { display: none !important; }
+  body, .pol-container { background: #fff; padding: 0; margin: 0; max-width: 100%; }
+  .poll-sheet { border: 2px solid #000; box-shadow: none; margin: 0; padding: 10px; }
+}

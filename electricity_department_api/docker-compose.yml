@@ -1,0 +1,23 @@
+services:
+  electricity-department-api:
+    build: .
+    container_name: electricity_department_api
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=Electricity Distribution Department API
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///./data/electricity_department.db
+      - CHAOS_ENABLED=false
+      - APPLICATION_FAILURE_RATE=0.10
+      - VERIFY_FAILURE_RATE=0.10
+      - STATUS_FAILURE_RATE=0.05
+      - SCHEMA_DRIFT_RATE=0.20
+      - SIMULATED_DELAY_RATE=0.05
+      - SIMULATED_DELAY_MS=3000
+    volumes:
+      - sqlite_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:

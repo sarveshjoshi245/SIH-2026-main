@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="reg.pageTitle">Register — Samanvay Portal</title>
+  <link rel="stylesheet" href="/css/gov-style.css">
+  <link rel="stylesheet" href="/css/samanvay-theme.css" data-ui-added>
+  <link rel="stylesheet" href="/css/samanvay-design.css" data-ui-added>
+  <script src="/js/i18n-strings.js" defer data-ui-added></script>
+  <script src="/js/i18n.js" defer data-ui-added></script>
+  <style>
+    .account-type-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .account-type-btn {
+      flex: 1;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .account-type-btn.active {
+      background: #ffffff;
+      color: #1e3a8a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tricolor-stripe" aria-hidden="true" data-ui-added></div>
+
+  <!-- Samanvay shared utility bar (GIGW): skip link, text size, language -->
+  <a class="skip-link" href="#main-content" data-ui-added data-i18n="common.skip">Skip to main content</a>
+  <div class="gigw-bar" data-ui-added>
+    <div class="gigw-bar__inner">
+      <span class="gigw-bar__gov" data-i18n="common.govLine">Samanvay — one application for Land, Electricity and Pollution approvals</span>
+      <div class="gigw-bar__controls">
+        <div class="gigw-group" role="group" aria-label="Text size" data-i18n-aria-label="common.textSize">
+          <span class="gigw-group__label" data-i18n="common.textSize">Text size</span>
+          <button type="button" data-text-size="small" aria-pressed="false" aria-label="Smaller text" data-i18n-aria-label="common.textSmaller" translate="no">A−</button>
+          <button type="button" data-text-size="normal" aria-pressed="true" aria-label="Normal text" data-i18n-aria-label="common.textNormal" translate="no">A</button>
+          <button type="button" data-text-size="large" aria-pressed="false" aria-label="Larger text" data-i18n-aria-label="common.textLarger" translate="no">A+</button>
+        </div>
+        <div class="gigw-group" role="group" aria-label="Language" data-i18n-aria-label="common.language">
+          <button type="button" data-lang="en" lang="en" aria-pressed="true" translate="no">English</button>
+          <button type="button" data-lang="mr" lang="mr" aria-pressed="false" translate="no">मराठी</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gov-top-bar">
+    <div>
+      <strong translate="no">Samanvay</strong> • <span>New account registration</span>
+    </div>
+    <div>
+      <a href="/" data-i18n="common.home">Home</a> | <a href="/login.html" data-i18n="common.login">Log in</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="brand-wrapper">
+      <div class="emblem-icon">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="#1e3a8a" />
+          <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933" />
+          <rect x="11" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="18.5" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="26" y="19" width="3" height="10" fill="#ffffff" />
+          <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808" />
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1>Create your account</h1>
+        <p>Register as a Company or Individual to submit single-window clearance applications</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="/login.html" class="btn btn-outline" data-i18n="reg.loginBtn">Already registered? Log in</a>
+    </div>
+  </header>
+
+  <nav class="sv-nav" aria-label="Main menu" data-i18n-aria-label="nav.label" data-ui-added>
+    <div class="sv-nav__inner">
+      <ul class="sv-nav__list">
+        <li><a href="/" data-i18n="common.home">Home</a></li>
+        <li><a href="/dashboard.html?tab=process" data-i18n="nav.apply">Apply for approvals</a></li>
+        <li><a href="/dashboard.html?tab=status" data-i18n="dash.st.title">Track my application</a></li>
+        <li><a href="/dashboard.html?tab=query" data-i18n="dash.nav.groupHelp">Help and complaints</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="auth-page-container">
+    <span id="main-content" class="skip-target" tabindex="-1"></span>
+    <div class="auth-box">
+      <div class="auth-header">
+        <h2>New Account Registration</h2>
+        <p>Choose your account type below to get started.</p>
+      </div>
+
+      <div class="auth-body">
+
+        <!-- ACCOUNT TYPE SELECTION -->
+        <div class="account-type-tabs">
+          <button type="button" id="regTypeCompany" class="account-type-btn active" onclick="switchRegAccountType('company')">
+            🏢 Company Account
+          </button>
+          <button type="button" id="regTypeIndividual" class="account-type-btn" onclick="switchRegAccountType('individual')">
+            👤 Individual Account
+          </button>
+        </div>
+
+        <div id="regAlert" role="alert" style="display:none; padding: 10px 14px; border-radius: 6px; font-size: 0.82rem; margin-bottom: 16px;"></div>
+
+        <form id="regForm">
+          
+          <!-- COMPANY REGISTRATION FIELDS -->
+          <div id="companyFields">
+            <div class="form-group">
+              <label class="form-label" for="companyName">Company / Organization Name <span class="req-star">*</span></label>
+              <input type="text" id="companyName" class="form-input" placeholder="e.g. Acme Chemical Manufacturing Pvt Ltd">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="companyPan">Company PAN (Permanent Account Number) <span class="req-star">*</span></label>
+              <div class="input-with-verify">
+                <input type="text" id="companyPan" class="form-input" placeholder="e.g. ACMEC1234F" maxlength="10" style="text-transform: uppercase;">
+                <button type="button" id="btnVerifyCompanyPan" onclick="verifyPanField('companyPan', 'companyPanStatus')" class="btn btn-outline" style="white-space: nowrap;">Check PAN</button>
+              </div>
+              <div id="companyPanStatus" style="font-size: 0.85rem; margin-top: 4px; color: var(--gov-text-muted);">10-character Income Tax PAN for the enterprise.</div>
+            </div>
+          </div>
+
+          <!-- INDIVIDUAL REGISTRATION FIELDS -->
+          <div id="individualFields" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="firstName">First name <span class="req-star">*</span></label>
+                <input type="text" id="firstName" class="form-input" placeholder="e.g. Ramesh">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lastName">Last name <span class="req-star">*</span></label>
+                <input type="text" id="lastName" class="form-input" placeholder="e.g. Patil">
+              </div>
+            </div>
+
+            <!-- Individual Aadhaar or PAN -->
+            <div class="form-group">
+              <label class="form-label" for="indAadhaar">Aadhaar Number (12 digits)</label>
+              <div class="input-with-verify">
+                <input type="text" id="indAadhaar" class="form-input" placeholder="e.g. 1234-5678-9012" inputmode="numeric" maxlength="14">
+                <button type="button" onclick="verifyAadhaarField()" class="btn btn-outline" style="white-space: nowrap;">Check Aadhaar</button>
+              </div>
+              <div id="indAadhaarStatus" style="font-size: 0.85rem; margin-top: 4px; color: var(--gov-text-muted);">12-digit Aadhaar number for individual identity verification.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="indPan">Individual PAN (10 characters)</label>
+              <div class="input-with-verify">
+                <input type="text" id="indPan" class="form-input" placeholder="e.g. RMPTL1234F" maxlength="10" style="text-transform: uppercase;">
+                <button type="button" onclick="verifyPanField('indPan', 'indPanStatus')" class="btn btn-outline" style="white-space: nowrap;">Check PAN</button>
+              </div>
+              <div id="indPanStatus" style="font-size: 0.85rem; margin-top: 4px; color: var(--gov-text-muted);">Individual 10-character PAN.</div>
+            </div>
+          </div>
+
+          <!-- COMMON CONTACT & PASSWORD FIELDS -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="mobile">Mobile Number <span class="req-star">*</span></label>
+              <input type="tel" id="mobile" class="form-input" placeholder="10-digit mobile" inputmode="numeric" maxlength="10" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address <span class="req-star">*</span></label>
+              <input type="email" id="email" class="form-input" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Create Account Password <span class="req-star">*</span></label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Enter password (e.g. pass123)" required>
+          </div>
+
+          <button type="submit" id="btnSubmitReg" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 8px;">
+            Create Account & Save to Database ➔
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; font-size: 0.85rem; color: #64748b; text-align: center;">
+          Already registered? <a href="/login.html" style="color: var(--gov-primary); font-weight: 600;">Log in here</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let regAccountType = 'company'; // 'company' or 'individual'
+
+    const companyFields = document.getElementById('companyFields');
+    const individualFields = document.getElementById('individualFields');
+    const regForm = document.getElementById('regForm');
+    const regAlert = document.getElementById('regAlert');
+
+    function switchRegAccountType(type) {
+      regAccountType = type;
+      regAlert.style.display = 'none';
+
+      const compBtn = document.getElementById('regTypeCompany');
+      const indBtn = document.getElementById('regTypeIndividual');
+
+      if (type === 'company') {
+        compBtn.classList.add('active');
+        indBtn.classList.remove('active');
+        companyFields.style.display = 'block';
+        individualFields.style.display = 'none';
+      } else {
+        indBtn.classList.add('active');
+        compBtn.classList.remove('active');
+        companyFields.style.display = 'none';
+        individualFields.style.display = 'block';
+      }
+    }
+
+    // Auto formatters
+    document.getElementById('indAadhaar').addEventListener('input', (e) => {
+      const digits = e.target.value.replace(/\D/g, '').slice(0, 12);
+      e.target.value = digits.replace(/(\d{4})(?=\d)/g, '$1-');
+    });
+
+    ['companyPan', 'indPan'].forEach(id => {
+      document.getElementById(id).addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 10).toUpperCase();
+      });
+    });
+
+    async function verifyPanField(inputId, statusId) {
+      const val = document.getElementById(inputId).value.trim().toUpperCase();
+      const statusEl = document.getElementById(statusId);
+      if (val.length !== 10) {
+        statusEl.innerHTML = '<span class="verify-badge verify-invalid">PAN must be 10 characters (e.g. ABCDE1234F).</span>';
+        return;
+      }
+      statusEl.innerHTML = '<span>Checking PAN against Income Tax database…</span>';
+      try {
+        const res = await fetch('/api/auth/verify-pan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pan: val })
+        });
+        const data = await res.json();
+        statusEl.innerHTML = data.valid 
+          ? `<span class="verify-badge verify-valid">${data.message}</span>`
+          : `<span class="verify-badge verify-invalid">${data.message}</span>`;
+      } catch (e) {
+        statusEl.innerHTML = '<span class="verify-badge verify-invalid">Could not check PAN.</span>';
+      }
+    }
+
+    async function verifyAadhaarField() {
+      const val = document.getElementById('indAadhaar').value.replace(/[\s-]/g, '');
+      const statusEl = document.getElementById('indAadhaarStatus');
+      if (val.length !== 12) {
+        statusEl.innerHTML = '<span class="verify-badge verify-invalid">Aadhaar must be 12 digits.</span>';
+        return;
+      }
+      statusEl.innerHTML = '<span>Checking Aadhaar number…</span>';
+      try {
+        const res = await fetch('/api/auth/verify-aadhaar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ aadhaar: val })
+        });
+        const data = await res.json();
+        statusEl.innerHTML = data.valid 
+          ? `<span class="verify-badge verify-valid">${data.message}</span>`
+          : `<span class="verify-badge verify-invalid">${data.message}</span>`;
+      } catch (e) {
+        statusEl.innerHTML = '<span class="verify-badge verify-invalid">Could not check Aadhaar.</span>';
+      }
+    }
+
+    // Submit Registration
+    regForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      regAlert.style.display = 'none';
+
+      const isCompany = regAccountType === 'company';
+      const companyName = document.getElementById('companyName').value.trim();
+      const companyPan = document.getElementById('companyPan').value.trim().toUpperCase();
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const indAadhaar = document.getElementById('indAadhaar').value.replace(/[\s-]/g, '');
+      const indPan = document.getElementById('indPan').value.trim().toUpperCase();
+      const mobile = document.getElementById('mobile').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+
+      const payload = {
+        accountType: regAccountType,
+        companyName: isCompany ? companyName : '',
+        firstName: isCompany ? companyName : firstName,
+        lastName: isCompany ? 'Enterprise' : lastName,
+        mobile: mobile,
+        email: email,
+        pan: isCompany ? companyPan : (indPan || 'INDV12345F'),
+        aadhaar: isCompany ? '' : indAadhaar,
+        password: password
+      };
+
+      const btn = document.getElementById('btnSubmitReg');
+      btn.disabled = true;
+      btn.innerText = 'Creating account in database…';
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = 'Create Account & Save to Database ➔';
+
+        if (data.success) {
+          regAlert.style.background = '#dcfce7';
+          regAlert.style.color = '#15803d';
+          regAlert.style.border = '1px solid #86efac';
+          regAlert.innerHTML = `✓ <strong>Registration successful!</strong> ${data.message} Taking you to login page…`;
+          regAlert.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = '/login.html';
+          }, 1400);
+        } else {
+          regAlert.style.background = '#fee2e2';
+          regAlert.style.color = '#991b1b';
+          regAlert.style.border = '1px solid #fca5a5';
+          regAlert.innerHTML = `⚠️ <strong>Registration failed:</strong> ${data.message}`;
+          regAlert.style.display = 'block';
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Create Account & Save to Database ➔';
+        regAlert.style.background = '#fee2e2';
+        regAlert.style.color = '#991b1b';
+        regAlert.innerHTML = '⚠️ Could not connect to authentication server.';
+        regAlert.style.display = 'block';
+      }
+    });
+
+    switchRegAccountType('company');
+  </script>
+</body>
+
+</html>

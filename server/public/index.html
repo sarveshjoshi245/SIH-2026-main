@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="index.pageTitle">Samanvay — one application for industry approvals</title>
+  <link rel="stylesheet" href="/css/gov-style.css">
+  <link rel="stylesheet" href="/css/samanvay-theme.css" data-ui-added>
+  <link rel="stylesheet" href="/css/samanvay-design.css" data-ui-added>
+  <script src="/js/i18n-strings.js" defer data-ui-added></script>
+  <script src="/js/i18n.js" defer data-ui-added></script>
+  <script>
+    /* Scroll reveal switch, set before first paint so sections never flash. */
+    (function () {
+      try {
+        document.documentElement.classList.add('ix-search-wait');   /* hero search: shown after first scroll */
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('ix-reveal-on');
+        }
+      } catch (e) { /* leave everything visible */ }
+    })();
+  </script>
+  <style>
+    /* Landing-page-only rules. Everything here is scoped to classes that exist
+       only on index.html (ix-*) or overrides applied on this page alone, so the
+       shared stylesheets — and login, register and dashboard — are untouched. */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #1e3a8a;
+      --ix-accent: #1e3a8a;
+      --ix-line: #d7dde6;
+      --ix-tint: #eef2f7;
+      --ix-text-2: #475569;
+    }
+
+    .ix-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .ix-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      fill: none;
+      stroke: var(--ix-accent);
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Row 1: thin utility bar (skip link, text size, language only) ── */
+    .ix-utility .gigw-bar__inner {
+      justify-content: flex-end;
+    }
+
+    /* ── Row 2: one consolidated masthead — a single, non-wrapping row on desktop:
+          logo | menu (centre) | Log in + Start my application (right) ── */
+    .ix-masthead {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: clamp(12px, 1.6vw, 24px);
+      padding: 6px clamp(12px, 2.5vw, 32px);
+      background: #fff;
+      border-bottom: 1px solid var(--ix-line);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      font-size: 0.9rem;
+    }
+
+    .ix-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      min-height: 44px;
+    }
+
+    .ix-brand__name {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--ix-accent);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .ix-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 1.2vw, 18px);
+      min-width: 0;
+    }
+
+    .ix-nav {
+      min-width: 0;
+    }
+
+    .ix-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0;
+    }
+
+    .ix-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 clamp(6px, 0.8vw, 12px);
+      color: #1e293b;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+    }
+
+    .ix-nav a:hover {
+      color: var(--ix-accent);
+      border-bottom-color: #f97316;
+    }
+
+    .ix-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ix-actions .btn {
+      white-space: nowrap;
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+
+    /* 1261–1480px (e.g. 1280/1366/1440 laptops): still ONE row — tighten spacing and
+       drop the separate Home link (the logo already links home). */
+    @media (max-width: 1480px) {
+      .ix-nav__home {
+        display: none;
+      }
+
+      .ix-masthead {
+        column-gap: 12px;
+      }
+
+      .ix-center {
+        gap: 8px;
+      }
+
+      .ix-actions .btn {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+
+    /* 1260px and below there is not enough width for one row: stack deliberately
+       (logo + buttons, then menu) instead of clipping links. */
+    @media (max-width: 1260px) {
+      .ix-masthead {
+        grid-template-columns: 1fr auto;
+        row-gap: 4px;
+      }
+
+      .ix-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        row-gap: 4px;
+      }
+
+      .ix-nav__home {
+        display: list-item;
+      }
+
+      .ix-nav ul {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .ix-masthead {
+        grid-template-columns: 1fr;
+      }
+
+      .ix-actions {
+        justify-content: stretch;
+      }
+
+      .ix-actions .btn {
+        flex: 1;
+      }
+    }
+
+    /* ── Hero: photo banner, no floating pills ── */
+    .gov-hero-banner {
+      padding-bottom: 56px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .hero-chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-actions .btn-hero-primary {
+      order: 2;
+    }
+
+    .btn-hero-primary,
+    .btn-hero-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-hero-primary svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .btn-hero-secondary {
+      background: transparent;
+      border: 1px solid;
+    }
+
+    /* ── Hero "Find a service": one wide white bar with an orange Search button ──
+       Desktop: positioned in the empty space below the buttons, so it takes no
+       layout room and the hero looks exactly as before at load. Small or short
+       screens (no spare room, and that area is below the fold at load): in the
+       normal flow instead. The control is still the same service <select>. */
+    .ix-hero-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: min(720px, 100%);
+      margin: 0;
+      padding: 8px 8px 8px 0;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+      text-align: left;
+    }
+
+    .ix-hero-search:focus-within {
+      outline: 3px solid #f59e0b;
+      outline-offset: 3px;
+    }
+
+    @media (min-width: 769px) and (min-height: 721px) {
+      .ix-hero-search {
+        position: absolute;
+        left: 50%;
+        top: calc(100% + 22px);
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 768px),
+    (max-height: 720px) {
+      .ix-hero-search {
+        margin: 20px auto 56px;
+      }
+
+      /* bottom room for the photo credit */
+    }
+
+    /* width 0 + flex-grow: the long option labels never widen the hero column. */
+    .ix-hero-search .ix-search__field {
+      display: flex;
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+    }
+
+    .ix-hero-search select {
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+      min-height: 48px;
+      padding: 0 40px 0 24px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.05rem;
+      color: #1e293b;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 18px;
+    }
+
+    .ix-hero-search select:invalid {
+      color: #94a3b8;
+    }
+
+    /* nothing chosen yet: reads as a prompt */
+    .ix-hero-search select option {
+      color: #1e293b;
+    }
+
+    .ix-hero-search select:focus-visible {
+      outline: none;
+    }
+
+    /* the whole bar shows focus */
+    /* Same colours, text and corners as the hero's "Start my application" button. */
+    .ix-hero-search__go {
+      flex-shrink: 0;
+      min-height: 48px;
+      padding: 0 30px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+      background: var(--ds-saffron, #f97316);
+      transition: background 0.15s;
+    }
+
+    .ix-hero-search__go:hover {
+      background: #fb923c;
+    }
+
+    .ix-hero-search__go:focus-visible {
+      outline: 3px solid #1e3a8a;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 560px) {
+      .ix-hero-search select {
+        padding-left: 14px;
+        font-size: 1rem;
+      }
+
+      .ix-hero-search__go {
+        padding: 0 18px;
+      }
+    }
+
+    /* Hidden until the first scroll (class set by the head script, so without
+       JavaScript it is simply always visible). visibility:hidden also keeps it out
+       of the Tab order and away from screen readers while hidden. */
+    .ix-search-wait .ix-hero-search {
+      transition: opacity 0.45s ease-out, translate 0.45s ease-out;
+    }
+
+    .ix-search-wait .ix-hero-search:not(.is-shown) {
+      opacity: 0;
+      visibility: hidden;
+      translate: 0 18px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ix-search-wait .ix-hero-search {
+        transition: none;
+        translate: none;
+      }
+    }
+
+    @media print {
+      .ix-hero-search {
+        display: none;
+      }
+    }
+
+    /* ── Fixed Gateway of India backdrop: hero through the FAQ ──
+       Blue tint + photo are ONE fixed background on the whole container, so the
+       tint is continuous. The footer (solid navy) follows, reached through a
+       soft fade instead of a hard edge. */
+    :root {
+      --ix-mh: 57px;
+      --ix-hero-top: 150px;
+    }
+
+    /* measured by script; these are fallbacks */
+    .ix-scene {
+      position: relative;
+      isolation: isolate;
+      background-color: #0f172a;
+      /* Clips the fixed photo layer below to this container, so it shows from the
+         hero through the FAQ only. */
+      clip-path: inset(0);
+      padding-bottom: 120px;
+      /* room for the fade into the footer */
+    }
+
+    /* The photo + blue tint live on their own fixed layer that the GPU just moves,
+       instead of background-attachment: fixed (which repaints the whole photo on
+       every scroll frame and made scrolling feel heavy). Looks the same. */
+    .ix-scene::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(135deg, rgba(30, 58, 138, 0.80) 0%, rgba(15, 23, 42, 0.84) 100%),
+        url("/images/gateway-of-india.jpg");
+      background-size: cover, cover;
+      background-position: center, center;
+      background-repeat: no-repeat, no-repeat;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    .ix-scene>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Fade into the footer's own colour (#0f172a = the tint's darker stop). */
+    .ix-scene::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 160px;
+      z-index: 0;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0) 0%, #0f172a 100%);
+      pointer-events: none;
+    }
+
+    .gov-footer {
+      margin-top: 0;
+      border-top: 0;
+    }
+
+    /* no light gap, no saffron line (this page only) */
+
+    /* Hero: fills the rest of the first viewport exactly, content centred, so
+       nothing below peeks in at load. No background or border of its own. */
+    .ix-scene .gov-hero-banner {
+      background: transparent;
+      border-bottom: 0;
+      min-height: calc(100vh - var(--ix-hero-top));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 40px;
+      padding-bottom: 48px;
+    }
+
+    .ix-scene .hero-chip {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .ix-scene .sv-hero-credit {
+      color: #e2e8f0;
+    }
+
+    /* Sections after the hero: sized to their content and stacked as one
+       continuous flow (only the hero fills the first screen). */
+    .ix-band {
+      padding: 20px 16px;
+      background: transparent;
+      border: 0;
+    }
+
+    .ix-scene .gov-hero-banner+.ix-band {
+      padding-top: 40px;
+    }
+
+    .ix-scene .ix-band:last-child {
+      padding-bottom: 56px;
+    }
+
+    .ix-band>.gov-container {
+      width: 100%;
+    }
+
+    .ix-panel {
+      background: #ffffff;
+      /* no backdrop-filter support: solid */
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.28);
+      padding: 28px clamp(16px, 3vw, 32px);
+    }
+
+    .ix-band--tint .ix-panel {
+      background: #eef2f7;
+    }
+
+    @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+      .ix-panel {
+        background: rgba(255, 255, 255, 0.85);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+      }
+
+      .ix-band--tint .ix-panel {
+        background: rgba(238, 242, 247, 0.85);
+      }
+    }
+
+    .ix-band>.gov-container>section {
+      margin-top: 0;
+    }
+
+    /* ── Scrolling: free and direct (no scroll-snap). Snapping made the page feel
+       heavy on touchpads — it pulled the page to section edges and resisted small
+       scrolls. Sections fade in as they arrive. ──
+       scroll-padding keeps in-page links (e.g. Skip to main content) clear of the
+       sticky header. */
+    html {
+      scroll-padding-top: var(--ix-mh);
+    }
+
+    /* Mobile / touch fallback: normal scrolling photo, free scrolling (no snap).
+       Reveal animations still run. */
+    @media (max-width: 768px) {
+      .ix-scene {
+        clip-path: none;
+        background-image: linear-gradient(135deg, rgba(30, 58, 138, 0.80) 0%, rgba(15, 23, 42, 0.84) 100%), url("/images/gateway-of-india.jpg");
+        background-size: cover, cover;
+        background-position: center, center;
+      }
+
+      .ix-scene::before {
+        display: none;
+      }
+
+      .ix-band {
+        padding: 20px 10px 0;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .ix-scene {
+        clip-path: none;
+        background-image: linear-gradient(135deg, rgba(30, 58, 138, 0.80) 0%, rgba(15, 23, 42, 0.84) 100%), url("/images/gateway-of-india.jpg");
+        background-size: cover, cover;
+        background-position: center, center;
+      }
+
+      .ix-scene::before {
+        display: none;
+      }
+    }
+
+    /* ── Functional sections (categories, departments, steps, track): ONE layer ──
+       No frosted wrapper panel: solid, near-opaque cards sit directly on the
+       tinted photo. Frosted glass stays for the informational panels (Ready to
+       apply, FAQ). The wrapper keeps .ix-panel only for the reveal animation. */
+    .ix-panel.ix-panel--flat {
+      background: none;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .ix-panel--flat .section-head {
+      border-bottom-color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 16px;
+    }
+
+    .ix-panel--flat .section-head h2 {
+      color: #ffffff;
+    }
+
+    .ix-panel--flat .section-head p {
+      color: #e2e8f0;
+    }
+
+    .ix-updated {
+      margin-top: 6px !important;
+      font-size: 0.82rem !important;
+      color: #e2e8f0 !important;
+    }
+
+    .ix-updated time {
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* FAQ: each question is its own solid card on the photo (no wrapper panel).
+       Native <details> toggle and its +/× marker are unchanged. */
+    .ix-band--faq .accordion-wrapper {
+      gap: 8px;
+    }
+
+    .ix-band--faq .accordion-item {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(203, 213, 225, 0.95);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+    }
+
+    .ix-band--faq .accordion-item[open] {
+      border-color: rgba(148, 163, 184, 0.95);
+    }
+
+    .ix-band--faq .accordion-header {
+      padding: 12px 16px;
+    }
+
+    .ix-band--faq .accordion-item[open] .accordion-header {
+      background: rgba(241, 245, 249, 0.96);
+    }
+
+    .ix-band--faq .accordion-body {
+      padding: 12px 16px 14px;
+    }
+
+    .ix-acc--land {
+      --acc: #15803d;
+    }
+
+    .ix-acc--elec {
+      --acc: #0369a1;
+    }
+
+    .ix-acc--poll {
+      --acc: #c2410c;
+    }
+
+    .ix-acc--all {
+      --acc: #1e3a8a;
+    }
+
+    /* Solid icon badges: filled square in the card's accent, bold white pictogram */
+    .ix-badge {
+      display: inline-grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      background: var(--acc, var(--ix-accent));
+    }
+
+    .ix-badge svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .ix-badge .f {
+      fill: #ffffff;
+      stroke: none;
+    }
+
+    .ix-badge .l {
+      fill: none;
+      stroke: var(--acc, var(--ix-accent));
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .ix-badge .o1 {
+      opacity: 0.8;
+    }
+
+    .ix-badge .o2 {
+      opacity: 0.6;
+    }
+
+    .ix-badge .w {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+    }
+
+    .ix-badge--land {
+      --acc: #15803d;
+    }
+
+    .ix-badge--elec {
+      --acc: #0369a1;
+    }
+
+    .ix-badge--poll {
+      --acc: #c2410c;
+    }
+
+    .ix-badge--all,
+    .ix-badge--navy {
+      --acc: #1e3a8a;
+    }
+
+    /* "Start" is a real button, same outline style as "Log in" */
+    .ix-card-btn {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.9rem;
+    }
+
+
+    /* ── Scroll reveal: only active once the script adds .ix-reveal-on to <html>,
+          so the page is fully visible without JavaScript or with reduced motion. ── */
+    .ix-reveal-on .ix-panel {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+    }
+
+    .ix-reveal-on .ix-panel.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ix-reveal-on .ix-panel {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    @media print {
+      .ix-panel {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .ix-scene {
+        background: none;
+      }
+    }
+
+    /* ── Quick start ── */
+    .ix-qs {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+      gap: 20px 40px;
+      align-items: start;
+    }
+
+    .ix-qs h2 {
+      margin: 0 0 6px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--ix-accent);
+    }
+
+    .ix-qs__intro p {
+      margin: 0 0 18px;
+      color: var(--ix-text-2);
+    }
+
+    .ix-qs__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .ix-qs__actions .btn {
+      margin-bottom: 6px;
+    }
+
+    .ix-qs__actions a:not(.btn) {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: var(--ix-accent);
+      font-weight: 700;
+    }
+
+    .ix-qs__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--ix-line);
+    }
+
+    .ix-qs__list li {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--ix-line);
+    }
+
+    .ix-qs__list strong {
+      display: block;
+      color: #0f172a;
+    }
+
+    .ix-qs__list span {
+      color: var(--ix-text-2);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 820px) {
+      .ix-qs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    /* ── Category and department cards: same solid, near-opaque treatment ── */
+    .ix-cat-grid,
+    .ix-dept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .ix-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(203, 213, 225, 0.95);
+      border-top: 3px solid var(--acc, var(--ix-accent));
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+      padding: 16px;
+    }
+
+    .ix-card__head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ix-card h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      color: #0f172a;
+    }
+
+    .ix-card__dept {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--ix-text-2);
+      margin-top: 2px;
+    }
+
+    .ix-card p {
+      margin: 0;
+      color: var(--ix-text-2);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .ix-checks {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 0;
+      flex: 1;
+    }
+
+    .ix-checks li {
+      position: relative;
+      padding: 7px 0 7px 26px;
+      font-size: 0.95rem;
+      color: #1e293b;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .ix-checks li:last-child {
+      border-bottom: 0;
+    }
+
+    .ix-checks li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 12px;
+      width: 12px;
+      height: 7px;
+      border-left: 2.5px solid var(--acc, var(--ix-accent));
+      border-bottom: 2.5px solid var(--acc, var(--ix-accent));
+      transform: rotate(-45deg);
+    }
+
+    .ix-card .ix-card__note {
+      margin: -4px 0 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #9a3412;
+    }
+
+    .ix-card__foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: auto;
+    }
+
+    .ix-card__foot .dept-tag {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: var(--ix-line);
+    }
+
+    .ix-band-note {
+      margin: 12px 0 0;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+
+      .ix-cat-grid,
+      .ix-dept-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── How Samanvay works: numbered stepper, active box, detail below ── */
+    .ix-steps__list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .ix-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      font: inherit;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(203, 213, 225, 0.95);
+      border-top: 3px solid var(--ix-accent);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .ix-step__num {
+      display: inline-grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      background: var(--ix-accent);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .ix-step__label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1.3;
+    }
+
+    .ix-step:hover {
+      background: #ffffff;
+      border-color: rgba(148, 163, 184, 0.95);
+      border-top-color: var(--ix-accent);
+    }
+
+    .ix-step[aria-selected="true"] {
+      background: var(--ix-accent);
+      border-color: var(--ix-accent);
+      color: #fff;
+    }
+
+    .ix-step[aria-selected="true"] .ix-step__num {
+      background: #fff;
+      color: var(--ix-accent);
+    }
+
+    .ix-step:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 2px;
+    }
+
+    .ix-step-panel {
+      margin-top: 12px;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(203, 213, 225, 0.95);
+      border-left: 4px solid var(--ix-accent);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+    }
+
+    .ix-step-panel h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      color: #0f172a;
+    }
+
+    .ix-step-panel__n {
+      color: var(--ix-accent);
+    }
+
+    .ix-step-panel p {
+      margin: 0;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .ix-step-panel:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 2px;
+    }
+
+    /* With the script only the selected step's detail shows; without it, all do. */
+    .ix-step-panel[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+      .ix-steps__list {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .ix-step {
+        flex-direction: row;
+        text-align: left;
+        padding: 10px 12px;
+      }
+    }
+
+    /* ── Track: pointer to the login-based tracking page ── */
+    .ix-track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(203, 213, 225, 0.95);
+      border-top: 3px solid var(--ix-accent);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+      padding: 18px 20px;
+    }
+
+    .ix-track__text {
+      flex: 1 1 320px;
+    }
+
+    .ix-track h2 {
+      margin: 0 0 4px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--ix-accent);
+    }
+
+    .ix-track p {
+      margin: 0;
+      color: var(--ix-text-2);
+    }
+
+    .ix-track__btn {
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tricolor-stripe" aria-hidden="true" data-ui-added></div>
+
+  <!-- Row 1 — utility bar: skip link, text size, language (no tagline) -->
+  <a class="skip-link" href="#main-content" data-ui-added data-i18n="common.skip">Skip to main content</a>
+  <div class="gigw-bar ix-utility" data-ui-added>
+    <div class="gigw-bar__inner">
+      <div class="gigw-bar__controls">
+        <div class="gigw-group" role="group" aria-label="Text size" data-i18n-aria-label="common.textSize">
+          <span class="gigw-group__label" data-i18n="common.textSize">Text size</span>
+          <button type="button" data-text-size="small" aria-pressed="false" aria-label="Smaller text"
+            data-i18n-aria-label="common.textSmaller" translate="no">A−</button>
+          <button type="button" data-text-size="normal" aria-pressed="true" aria-label="Normal text"
+            data-i18n-aria-label="common.textNormal" translate="no">A</button>
+          <button type="button" data-text-size="large" aria-pressed="false" aria-label="Larger text"
+            data-i18n-aria-label="common.textLarger" translate="no">A+</button>
+        </div>
+        <div class="gigw-group" role="group" aria-label="Language" data-i18n-aria-label="common.language">
+          <button type="button" data-lang="en" lang="en" aria-pressed="true" translate="no">English</button>
+          <button type="button" data-lang="mr" lang="mr" aria-pressed="false" translate="no">मराठी</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2 — consolidated masthead: logo, main menu, find a service, log in / start.
+       The finder is a plain GET form; dashboard.html already opens ?tab=<section>. -->
+  <header class="ix-masthead">
+    <a href="/" class="ix-brand">
+      <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="40" height="40" rx="8" fill="#1e3a8a" />
+        <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933" />
+        <rect x="11" y="19" width="3" height="10" fill="#ffffff" />
+        <rect x="18.5" y="19" width="3" height="10" fill="#ffffff" />
+        <rect x="26" y="19" width="3" height="10" fill="#ffffff" />
+        <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808" />
+      </svg>
+      <h1 class="ix-brand__name" data-i18n="common.brandName">Samanvay</h1>
+    </a>
+    <div class="ix-center">
+      <nav class="ix-nav" aria-label="Main menu" data-i18n-aria-label="nav.label">
+        <ul>
+          <li class="ix-nav__home"><a href="/" data-i18n="common.home">Home</a></li>
+          <li><a href="/dashboard.html?tab=process" data-i18n="nav.apply">Apply for approvals</a></li>
+          <li><a href="/dashboard.html?tab=status" data-i18n="dash.st.title">Track my application</a></li>
+          <li><a href="/dashboard.html?tab=query" data-i18n="dash.nav.groupHelp">Help and complaints</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="ix-actions">
+      <a href="/login.html" class="btn btn-outline" data-i18n="common.login">Log in</a>
+      <a href="/dashboard.html" class="btn btn-primary" data-i18n="index.cta">Start my application ➔</a>
+    </div>
+  </header>
+
+  <main class="landing-main">
+    <span id="main-content" class="skip-target" tabindex="-1"></span>
+
+    <!-- Notice strip. Wording is factual: this is a prototype on sample data. -->
+    <div class="gov-notice-strip" role="note" data-ui-added>
+      <span class="gov-notice-tag" data-i18n="index.noticeTag">Notice</span>
+      <span class="gov-notice-text" data-i18n="index.noticeText">Samanvay is a Smart India Hackathon 2026 prototype. The
+        department records it checks are sample data.</span>
+    </div>
+
+    <!-- ═══ Fixed Gateway of India backdrop: hero through the FAQ.
+       Photo: A.Savin, Wikipedia — Free Art License (Commons {{FAL}}); see images/CREDITS.txt.
+       FAQ and footer sit outside this container on the normal page background. ═══ -->
+    <div class="ix-scene" data-ui-added>
+
+      <!-- ═══ Hero over the Gateway of India photo.
+       Photo: A.Savin, Wikipedia — Free Art License (Commons {{FAL}}); see images/CREDITS.txt.
+       It is a CSS background (decorative); the visible credit line below names it. ═══ -->
+      <section class="gov-hero-banner" aria-labelledby="heroTitle" data-ui-added>
+        <div class="gov-hero-container">
+          <div class="hero-chip">
+            <span class="hero-chip-dot" aria-hidden="true"></span>
+            <span data-i18n="index.chip">Maharashtra single-window service</span>
+          </div>
+          <h2 class="gov-hero-title" id="heroTitle"><span data-i18n="index.h1a">One application.</span> <span
+              class="sv-accent" data-i18n="index.h1b">Every department.</span></h2>
+          <p class="gov-hero-subtitle" data-i18n="index.heroDesc">Samanvay puts approvals from several government
+            departments into one application. Land Revenue, Electricity and Pollution Control are live on the platform
+            today. You fill in your project details once, and each department that needs them gets them.</p>
+          <div class="hero-actions">
+            <a href="/dashboard.html" class="btn-hero-primary">
+              <span data-i18n="index.ctaShort">Start my application</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <a href="/login.html" class="btn-hero-secondary" data-i18n="index.loginCta">Log in to my account</a>
+          </div>
+          <!-- Find a service (moved here from the header). Hidden at load; revealed
+           the first time the page is scrolled, then stays. -->
+          <form class="ix-search ix-hero-search" role="search" id="ixHeroSearch" action="/dashboard.html" method="get"
+            aria-label="Find a service" data-i18n-aria-label="nav.find">
+            <label for="svFindService" class="ix-sr-only" data-i18n="nav.find">Find a service</label>
+            <span class="ix-search__field">
+              <select id="svFindService" name="tab" required>
+                <option value="" data-i18n="index.searchPh">Choose a service…</option>
+                <option value="process" data-i18n="dash.wz.title">Check what permissions you need</option>
+                <option value="flowchart" data-i18n="dash.fc.title">Department checks</option>
+                <option value="status" data-i18n="dash.st.title">Track my application</option>
+                <option value="query" data-i18n="dash.nav.query">Ask a question</option>
+                <option value="grievance" data-i18n="dash.nav.grievance">Make a complaint</option>
+                <option value="feedback" data-i18n="dash.nav.feedback">Give feedback</option>
+              </select>
+            </span>
+            <button type="submit" class="ix-hero-search__go" data-i18n="index.searchBtn">Search</button>
+          </form>
+        </div>
+
+        <p class="sv-hero-credit">
+          <span data-i18n="index.heroCaption">Gateway of India, Mumbai</span> ·
+          <span data-i18n="index.heroPhoto">Photo:</span>
+          <a href="https://commons.wikimedia.org/wiki/File:Mumbai_03-2016_30_Gateway_of_India.jpg"
+            translate="no">A.Savin, Wikipedia</a> ·
+          <a href="https://artlibre.org/licence/lal/en/" data-i18n="index.heroLicence">Free Art License</a>
+        </p>
+      </section>
+
+      <!-- ═══ Quick start: what the Apply flow will ask for, plus entry points into it ═══ -->
+      <div class="ix-band ix-band--white">
+        <div class="gov-container ix-panel">
+          <section class="ix-qs" aria-labelledby="qsTitle">
+            <div class="ix-qs__intro">
+              <h2 id="qsTitle" data-i18n="index.qsTitle">Ready to apply? Keep these at hand</h2>
+              <p data-i18n="index.qsSub">The application asks for these. With them ready, you can finish in one sitting.
+              </p>
+              <div class="ix-qs__actions">
+                <a href="/dashboard.html?tab=process" class="btn btn-primary" data-i18n="index.ctaShort">Start my
+                  application</a>
+                <a href="/register.html" data-i18n="index.qsRegister">New here? Create an account first</a>
+                <a href="/dashboard.html?tab=status" data-i18n="index.qsTrack">Already applied? Track it</a>
+              </div>
+            </div>
+            <ol class="ix-qs__list">
+              <li>
+                <svg class="ix-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+                <div><strong data-i18n="index.qs1t">An account</strong><span data-i18n="index.qs1p">Registered with your
+                    Aadhaar and PAN. You log in with a one-time password (OTP).</span></div>
+              </li>
+              <li>
+                <svg class="ix-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="4" width="14" height="17" rx="2" />
+                  <path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3" />
+                </svg>
+                <div><strong data-i18n="index.qs2t">Your project basics</strong><span data-i18n="index.qs2p">Type of
+                    project, industry, district, land needed and power load — the 10 questions.</span></div>
+              </li>
+              <li>
+                <svg class="ix-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 3L7 21M17 3l-2 18M4 8h17M3 16h17" />
+                </svg>
+                <div><strong data-i18n="index.qs3t">Department reference numbers</strong><span
+                    data-i18n="index.qs3p">Your 7/12 survey number, MSEDCL application number and Pollution Control
+                    Board application number.</span></div>
+              </li>
+            </ol>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══ Services by category. Each list is exactly what the approvals engine
+       checks (interop_backend/app/engine/policy_engine.py) — nothing else is
+       offered as a separate service. Stage tags follow the backend waves. ═══ -->
+      <div class="ix-band ix-band--tint">
+        <div class="gov-container ix-panel ix-panel--flat">
+          <section aria-labelledby="catTitle">
+            <div class="section-head">
+              <div>
+                <h2 id="catTitle" data-i18n="index.catTitle">Services by category</h2>
+                <p data-i18n="index.catSub">What Samanvay checks for you in each area, with the department that holds
+                  the records.</p>
+                <p class="ix-updated"><span data-i18n="index.lastUpdated">Last updated:</span> <time
+                    datetime="2026-09-26" data-i18n="index.lastUpdatedDate">26 September 2026</time></p>
+              </div>
+            </div>
+            <div class="ix-cat-grid">
+              <article class="ix-card ix-acc--land" id="cat-land" aria-labelledby="catLandTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--land" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M6 2h8.5L19 6.5V21a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" />
+                      <path class="l" d="M8.5 11h7M8.5 14.5h7M8.5 18h4.5" />
+                    </svg></span>
+                  <div>
+                    <h3 id="catLandTitle" data-i18n="index.catLandTitle">Land &amp; Property</h3>
+                    <span class="ix-card__dept" data-i18n="index.svcLandTag">Revenue Department</span>
+                  </div>
+                </div>
+                <ul class="ix-checks">
+                  <li data-i18n="index.catLand1">Land record verification (7/12), found by survey number</li>
+                  <li data-i18n="index.catLand2">Owner’s PAN on the record matches yours</li>
+                  <li data-i18n="index.catLand3">Ownership and mutation status check</li>
+                  <li data-i18n="index.catLand4">No loan or other claim on the land (encumbrance)</li>
+                  <li data-i18n="index.catLand5">No court case on the land</li>
+                </ul>
+                <div class="ix-card__foot">
+                  <span class="dept-tag" data-i18n="dash.fc.stage1">Stage 1</span>
+                  <a href="/dashboard.html?tab=process" class="btn btn-outline ix-card-btn"
+                    data-i18n="index.svcStart">Start ➔</a>
+                </div>
+              </article>
+              <article class="ix-card ix-acc--elec" id="cat-elec" aria-labelledby="catElecTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--elec" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M13.5 1.5L4 14h7l-1.5 8.5L20 9.5h-7.2z" />
+                    </svg></span>
+                  <div>
+                    <h3 id="catElecTitle" data-i18n="index.catElecTitle">Electricity &amp; Utilities</h3>
+                    <span class="ix-card__dept" data-i18n="index.svcElecTag">MSEDCL (Mahavitaran)</span>
+                  </div>
+                </div>
+                <ul class="ix-checks">
+                  <li data-i18n="index.catElec1">New connection application, found by MSEDCL application number</li>
+                  <li data-i18n="index.catElec2">Applicant’s PAN on the application matches yours</li>
+                  <li data-i18n="index.catElec3">Connection application approved</li>
+                  <li data-i18n="index.catElec4">Connection ready to be switched on, or already on</li>
+                  <li data-i18n="index.catElec5">No unpaid electricity bills</li>
+                </ul>
+                <div class="ix-card__foot">
+                  <span class="dept-tag" data-i18n="dash.fc.stage1">Stage 1</span>
+                  <a href="/dashboard.html?tab=process" class="btn btn-outline ix-card-btn"
+                    data-i18n="index.svcStart">Start ➔</a>
+                </div>
+              </article>
+              <article class="ix-card ix-acc--poll" id="cat-poll" aria-labelledby="catPollTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--poll" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M2 22V10.5l6 3.6v-3.6l6 3.6V3h5v19z" />
+                      <path class="l" d="M5 18h2M10 18h2M15.5 18h2" />
+                    </svg></span>
+                  <div>
+                    <h3 id="catPollTitle" data-i18n="index.catPollTitle">Environment &amp; Pollution</h3>
+                    <span class="ix-card__dept" data-i18n="index.svcPollTag">Pollution Control Board</span>
+                  </div>
+                </div>
+                <ul class="ix-checks">
+                  <li data-i18n="index.catPoll1">Permission to set up (Consent to Establish), found by MPCB application
+                    number</li>
+                  <li data-i18n="index.catPoll2">Applicant’s PAN on the application matches yours</li>
+                  <li data-i18n="index.catPoll3">Consent to Establish approved</li>
+                  <li data-i18n="index.catPoll4">Your unit meets pollution rules (compliance status)</li>
+                </ul>
+                <p class="ix-card__note" data-i18n="index.catPollNote">Checked only after Land and Electricity are both
+                  approved.</p>
+                <div class="ix-card__foot">
+                  <span class="dept-tag" data-i18n="dash.fc.stage2">Stage 2</span>
+                  <a href="/dashboard.html?tab=process" class="btn btn-outline ix-card-btn"
+                    data-i18n="index.svcStart">Start ➔</a>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══ Connected government departments: what each one provides in the real workflow ═══ -->
+      <div class="ix-band ix-band--white">
+        <div class="gov-container ix-panel ix-panel--flat">
+          <section aria-labelledby="deptTitle">
+            <div class="section-head">
+              <div>
+                <h2 id="deptTitle" data-i18n="index.deptTitle">Connected government departments</h2>
+                <p data-i18n="index.deptSub">Samanvay asks these departments for your records. Each one still makes its
+                  own decision.</p>
+              </div>
+            </div>
+            <div class="ix-dept-grid">
+              <article class="ix-card ix-card--dept ix-acc--land" aria-labelledby="deptLandTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--land" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M12 2l9 5v2H3V7zM4 10h3v8H4zM10.5 10h3v8h-3zM17 10h3v8h-3zM2 19h20v3H2z" />
+                    </svg></span>
+                  <div>
+                    <h3 id="deptLandTitle" data-i18n="index.deptLandTitle">Land Revenue Department</h3>
+                    <span class="ix-card__dept" data-i18n="index.deptLandSub">7/12 land records</span>
+                  </div>
+                </div>
+                <p data-i18n="index.deptLandDesc">Keeps the 7/12 land records. It tells Samanvay who owns the land,
+                  whether the mutation entry is approved, and whether there is a loan, claim or court case on it.</p>
+              </article>
+              <article class="ix-card ix-card--dept ix-acc--elec" aria-labelledby="deptElecTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--elec" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M12 2l9 5v2H3V7zM4 10h3v8H4zM10.5 10h3v8h-3zM17 10h3v8h-3zM2 19h20v3H2z" />
+                    </svg></span>
+                  <div>
+                    <h3 id="deptElecTitle" data-i18n="index.deptElecTitle">Electricity (MSEDCL)</h3>
+                    <span class="ix-card__dept" data-i18n="index.deptElecSub">New power connections</span>
+                  </div>
+                </div>
+                <p data-i18n="index.deptElecDesc">Handles new power connections. It tells Samanvay whether your
+                  connection application is approved, whether the connection is ready, and whether any bills are unpaid.
+                </p>
+              </article>
+              <article class="ix-card ix-card--dept ix-acc--poll" aria-labelledby="deptPollTitle">
+                <div class="ix-card__head">
+                  <span class="ix-badge ix-badge--poll" aria-hidden="true"><svg viewBox="0 0 24 24">
+                      <path class="f" d="M12 2l9 5v2H3V7zM4 10h3v8H4zM10.5 10h3v8h-3zM17 10h3v8h-3zM2 19h20v3H2z" />
+                    </svg></span>
+                  <div>
+                    <h3 id="deptPollTitle" data-i18n="index.deptPollTitle">Pollution Control (MPCB)</h3>
+                    <span class="ix-card__dept" data-i18n="index.deptPollSub">Permission to set up</span>
+                  </div>
+                </div>
+                <p data-i18n="index.deptPollDesc">Gives permission to set up (Consent to Establish). It tells Samanvay
+                  whether your consent is approved and whether your unit meets pollution rules. It is asked only after
+                  Land and Electricity have approved.</p>
+              </article>
+            </div>
+            <p class="ix-band-note" data-i18n="index.deptNote">You still sign, pay fees and make the final submission on
+              each department’s official website.</p>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══ How Samanvay works: numbered stepper. The steps are the real flow
+       (questions → approvals list → Stage 1 in parallel → Stage 2 gated → result).
+       Without JavaScript every step's detail stays visible. ═══ -->
+      <div class="ix-band ix-band--tint">
+        <div class="gov-container ix-panel ix-panel--flat">
+          <section aria-labelledby="flowTitle">
+            <div class="section-head">
+              <div>
+                <h2 id="flowTitle" data-i18n="index.flowTitle">How Samanvay works</h2>
+                <p data-i18n="index.flowSub">From one application to a result from each connected department.</p>
+              </div>
+            </div>
+            <div class="ix-steps" id="ixSteps">
+              <div class="ix-steps__list" role="tablist" aria-labelledby="flowTitle">
+                <button type="button" class="ix-step" role="tab" id="ixStep1" aria-controls="ixStepPanel1"
+                  aria-selected="true"><span class="ix-step__num" aria-hidden="true">1</span><span
+                    class="ix-step__label" data-i18n="index.flow1">You answer 10 questions</span></button>
+                <button type="button" class="ix-step" role="tab" id="ixStep2" aria-controls="ixStepPanel2"
+                  aria-selected="false"><span class="ix-step__num" aria-hidden="true">2</span><span
+                    class="ix-step__label" data-i18n="index.flow2">We work out what you need</span></button>
+                <button type="button" class="ix-step" role="tab" id="ixStep3" aria-controls="ixStepPanel3"
+                  aria-selected="false"><span class="ix-step__num" aria-hidden="true">3</span><span
+                    class="ix-step__label" data-i18n="index.flow3">Stage 1: Land + Electricity</span></button>
+                <button type="button" class="ix-step" role="tab" id="ixStep4" aria-controls="ixStepPanel4"
+                  aria-selected="false"><span class="ix-step__num" aria-hidden="true">4</span><span
+                    class="ix-step__label" data-i18n="index.flow4">Stage 2: Pollution Control Board</span></button>
+                <button type="button" class="ix-step" role="tab" id="ixStep5" aria-controls="ixStepPanel5"
+                  aria-selected="false"><span class="ix-step__num" aria-hidden="true">5</span><span
+                    class="ix-step__label" data-i18n="index.flow5">Your overall result</span></button>
+              </div>
+              <div class="ix-step-panel" role="tabpanel" id="ixStepPanel1" aria-labelledby="ixStep1" tabindex="0">
+                <h3><span class="ix-step-panel__n" data-i18n="index.stepN1">Step 1</span> <span
+                    data-i18n="index.flow1">You answer 10 questions</span></h3>
+                <p data-i18n="index.step1d">After you log in, you answer 10 questions about your project, once: type of
+                  project, industry, district, land needed and power load.</p>
+              </div>
+              <div class="ix-step-panel" role="tabpanel" id="ixStepPanel2" aria-labelledby="ixStep2" tabindex="0">
+                <h3><span class="ix-step-panel__n" data-i18n="index.stepN2">Step 2</span> <span
+                    data-i18n="index.flow2">We work out what you need</span></h3>
+                <p data-i18n="index.step2d">From your answers, Samanvay lists the approvals your project needs and the
+                  order they are checked in. Your department reference numbers are asked for only at the end, just
+                  before your details are sent for checking.</p>
+              </div>
+              <div class="ix-step-panel" role="tabpanel" id="ixStepPanel3" aria-labelledby="ixStep3" tabindex="0">
+                <h3><span class="ix-step-panel__n" data-i18n="index.stepN3">Step 3</span> <span
+                    data-i18n="index.flow3">Stage 1: Land + Electricity</span></h3>
+                <p data-i18n="index.step3d">Your details go to the Land Revenue Department and MSEDCL at the same time.
+                  Samanvay checks your 7/12 land record and your electricity connection application, including that the
+                  PAN on each record matches yours.</p>
+              </div>
+              <div class="ix-step-panel" role="tabpanel" id="ixStepPanel4" aria-labelledby="ixStep4" tabindex="0">
+                <h3><span class="ix-step-panel__n" data-i18n="index.stepN4">Step 4</span> <span
+                    data-i18n="index.flow4">Stage 2: Pollution Control Board</span></h3>
+                <p data-i18n="index.step4d">The Pollution Control Board check starts only after both Land and
+                  Electricity have approved, because it needs those first. If either is not approved yet, the Pollution
+                  check waits.</p>
+              </div>
+              <div class="ix-step-panel" role="tabpanel" id="ixStepPanel5" aria-labelledby="ixStep5" tabindex="0">
+                <h3><span class="ix-step-panel__n" data-i18n="index.stepN5">Step 5</span> <span
+                    data-i18n="index.flow5">Your overall result</span></h3>
+                <p data-i18n="index.step5d">You see one overall result — “All approved”, “Waiting for departments” or
+                  “Action needed from you” — with a line for each department saying what its records show. Then you
+                  finish on each department’s website.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══ Track: a pointer to the real, login-based "Track my application" page.
+       No inline lookup widget — tracking needs a logged-in account. ═══ -->
+      <div class="ix-band ix-band--white">
+        <div class="gov-container ix-panel ix-panel--flat">
+          <section class="ix-track" aria-labelledby="trackTitle">
+            <span class="ix-badge ix-badge--navy" aria-hidden="true"><svg viewBox="0 0 24 24">
+                <path class="f" d="M4 13h4v8H4zM10 8h4v13h-4zM16 3h4v18h-4z" />
+              </svg></span>
+            <div class="ix-track__text">
+              <h2 id="trackTitle" data-i18n="index.trackTitle">Already applied? Track your application</h2>
+              <p data-i18n="index.trackDesc">Tracking is part of your account. Log in and open “Track my application” to
+                see where your application is with each department.</p>
+            </div>
+            <a href="/dashboard.html?tab=status" class="btn btn-primary ix-track__btn" data-i18n="dash.st.title">Track
+              my application</a>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══ FAQ: same frosted panel treatment, still inside the fixed backdrop ═══ -->
+      <div class="ix-band ix-band--white ix-band--faq">
+        <div class="gov-container ix-panel ix-panel--flat">
+
+          <!-- ═══ FAQ (reference accordion as native <details>; no script) ═══ -->
+          <section aria-labelledby="faqTitle">
+            <div class="section-head">
+              <div>
+                <h2 id="faqTitle" data-i18n="index.faqTitle">Help and frequently asked questions</h2>
+              </div>
+            </div>
+            <div class="accordion-wrapper">
+              <details class="accordion-item" open>
+                <summary class="accordion-header" data-i18n="index.faqQ1">Do I fill in a separate form for each
+                  department?</summary>
+                <div class="accordion-body" data-i18n="index.faqA1">No. You answer the questions once and Samanvay sends
+                  your details to each department that needs them. You still sign, pay fees and make the final
+                  submission on each department’s official website.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ2">In what order are the departments checked?
+                </summary>
+                <div class="accordion-body" data-i18n="index.faqA2">Land and Electricity are checked at the same time.
+                  The Pollution Control Board check starts only after both have approved.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ3">What do I need to log in?</summary>
+                <div class="accordion-body" data-i18n="index.faqA3">The Aadhaar or PAN number you registered with. We
+                  send a one-time password (OTP) to your registered mobile number.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ4">How do I track my application?</summary>
+                <div class="accordion-body" data-i18n="index.faqA4">Log in and open “Track my application” on your
+                  dashboard.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ5">What happens if a department rejects my
+                  application?</summary>
+                <div class="accordion-body" data-i18n="index.faqA5">Your result shows “Action needed from you”, and each
+                  department’s line shows what its records say — for example, that an application was turned down. Where
+                  the records give a reason, such as unpaid electricity bills, a claim on the land or a pollution-rule
+                  problem, that is shown too; otherwise you are asked to contact that department. Once it is sorted out
+                  with the department, send your details for checking again from your dashboard.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ6">What if I don’t have all my reference numbers
+                  yet?</summary>
+                <div class="accordion-body" data-i18n="index.faqA6">You can start without them. The 10 questions and the
+                  list of approvals you need don’t ask for reference numbers — they are only asked for at the last step,
+                  just before you send your details for checking. Your answers are not saved if you leave the page, so
+                  keep it open or be ready to answer the questions again.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ7">Is my information shared with anyone else?
+                </summary>
+                <div class="accordion-body" data-i18n="index.faqA7">Your details are sent only to the departments
+                  Samanvay checks for your application — Land Revenue, Electricity and Pollution Control — and only
+                  while your organisation’s consent is on record. Every time your details are shared, it is recorded in
+                  an audit log, with your PAN partly hidden.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ8">What happens if a department’s system is
+                  temporarily unavailable?</summary>
+                <div class="accordion-body" data-i18n="index.faqA8">Samanvay tries that department’s system again a
+                  couple of times straight away. If it still doesn’t answer, the checks that don’t depend on it still
+                  finish, and that department is shown as “Not checked” with the reason. Send your details for checking
+                  again a little later. If a department’s system keeps failing, Samanvay pauses calls to it for about 30
+                  seconds so it can recover.</div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-header" data-i18n="index.faqQ9">Can I stop sharing my information with a
+                  department after I’ve applied?</summary>
+                <div class="accordion-body" data-i18n="index.faqA9">This can’t be done from Samanvay yet. If you want to
+                  withdraw your consent for a department, call the free helpline 1800-120-8040 or email
+                  samanvay-support@gov.in.</div>
+              </details>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- /ix-scene -->
+  </main>
+
+  <!-- Samanvay shared footer (multi-column, same on every page) -->
+  <footer class="gov-footer" data-ui-added>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h2 data-i18n="common.brandName">Samanvay</h2>
+        <p data-i18n="footer.about">One application for Land, Electricity and Pollution approvals in Maharashtra.</p>
+        <p data-i18n="footer.proto">Prototype for Smart India Hackathon 2026. Department records are sample data.</p>
+      </div>
+      <nav class="footer-col" aria-label="Quick links" data-i18n-aria-label="footer.quick">
+        <h2 data-i18n="footer.quick">Quick links</h2>
+        <ul class="footer-links-list">
+          <li><a href="/" data-i18n="common.home">Home</a></li>
+          <li><a href="/dashboard.html?tab=process" data-i18n="nav.apply">Apply for approvals</a></li>
+          <li><a href="/dashboard.html?tab=status" data-i18n="dash.st.title">Track my application</a></li>
+          <li><a href="/dashboard.html?tab=query" data-i18n="dash.nav.groupHelp">Help and complaints</a></li>
+          <li><a href="/register.html" data-i18n="common.register">New user? Register</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-label="Department websites" data-i18n-aria-label="footer.depts">
+        <h2 data-i18n="footer.depts">Department websites</h2>
+        <ul class="footer-links-list">
+          <li><a href="http://localhost:4000/" data-i18n="index.badgeLand">Land records (7/12)</a></li>
+          <li><a href="http://localhost:8001/" data-i18n="index.badgeElec">Electricity connection (MSEDCL)</a></li>
+          <li><a href="http://localhost:4002/" data-i18n="index.badgePoll">Pollution permission (MPCB)</a></li>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h2 data-i18n="footer.help">Help and support</h2>
+        <p>
+          <span data-i18n="footer.helpline">Free helpline</span><br>
+          <a class="footer-helpline" href="tel:18001208040" translate="no">1800-120-8040</a><br>
+          <span data-i18n="footer.hours">9:30 AM – 6:00 PM, working days</span>
+        </p>
+        <p><a href="mailto:samanvay-support@gov.in" translate="no">samanvay-support@gov.in</a></p>
+        <p data-i18n="footer.a11y">Text size and English / मराठी controls are at the top of every page.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="common.footerMeta">© 2026 Samanvay · Single-window approvals · SIH 2026</span>
+      <a href="#main-content" data-i18n="footer.top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    /* Size the hero to end exactly at the bottom of the first viewport, and keep
+       snapped sections clear of the sticky header. Measures what sits above the
+       hero and the header height; re-measures on resize, language or text-size
+       changes (anything that changes those bars' heights). */
+    (function () {
+      var root = document.documentElement;
+      var hero = document.querySelector('.ix-scene .gov-hero-banner');
+      var header = document.querySelector('.ix-masthead');
+      if (!hero || !header) return;
+      function measure() {
+        var top = hero.getBoundingClientRect().top + window.pageYOffset;
+        root.style.setProperty('--ix-hero-top', Math.round(top) + 'px');
+        root.style.setProperty('--ix-mh', Math.round(header.getBoundingClientRect().height) + 'px');
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      window.addEventListener('load', measure);
+      if ('ResizeObserver' in window) {
+        var ro = new ResizeObserver(measure);
+        [header, document.querySelector('.gigw-bar'), document.querySelector('.gov-notice-strip')].forEach(function (el) { if (el) ro.observe(el); });
+      }
+    })();
+  </script>
+  <script>
+    /* Scroll reveal: fade + slight rise as each panel enters the viewport. */
+    (function () {
+      var root = document.documentElement;
+      if (!root.classList.contains('ix-reveal-on')) return;
+      try {
+        var panels = document.querySelectorAll('.ix-scene .ix-panel');
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+        Array.prototype.forEach.call(panels, function (p) { io.observe(p); });
+      } catch (e) {
+        root.classList.remove('ix-reveal-on');   /* never leave content hidden */
+      }
+    })();
+  </script>
+  <script>
+    /* Hero "Find a service": hidden at load, shown the first time the page is
+       scrolled off the very top, then left visible (the listener removes itself).
+       Same class-toggle + fade/rise transition as the section reveal above. An
+       IntersectionObserver can't be used here: the bar is already inside the
+       viewport at load, so it would fire before any scroll. */
+    (function () {
+      var root = document.documentElement;
+      var bar = document.getElementById('ixHeroSearch');
+      if (!bar) { root.classList.remove('ix-search-wait'); return; }
+      function show() {
+        if (window.pageYOffset <= 0) return;
+        bar.classList.add('is-shown');
+        window.removeEventListener('scroll', show);
+      }
+      try {
+        window.addEventListener('scroll', show, { passive: true });
+        show();   /* page restored part-way down (reload, back button, #anchor) */
+      } catch (e) {
+        root.classList.remove('ix-search-wait');   /* never leave it hidden */
+      }
+    })();
+  </script>
+  <script>
+    /* How Samanvay works: numbered stepper (tabs pattern). Click or use the arrow
+       keys to pick a step; only its detail shows. Without this script every
+       step's detail stays visible. */
+    (function () {
+      var box = document.getElementById('ixSteps');
+      if (!box) return;
+      var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+      function select(i, focus) {
+        tabs.forEach(function (tab, j) {
+          var on = j === i;
+          tab.setAttribute('aria-selected', on ? 'true' : 'false');
+          tab.tabIndex = on ? 0 : -1;
+          document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
+        });
+        if (focus) tabs[i].focus();
+      }
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { select(i, false); });
+        tab.addEventListener('keydown', function (e) {
+          var n = tabs.length, k = e.key, to = null;
+          if (k === 'ArrowRight' || k === 'ArrowDown') to = (i + 1) % n;
+          else if (k === 'ArrowLeft' || k === 'ArrowUp') to = (i - 1 + n) % n;
+          else if (k === 'Home') to = 0;
+          else if (k === 'End') to = n - 1;
+          if (to === null) return;
+          e.preventDefault();
+          select(to, true);
+        });
+      });
+      select(0, false);
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMANVAY Pollution Control Department • State Pollution Control Board | Dept. of Environment</title>
+  <meta name="description" content="SAMANVAY Pollution Control Department - State Pollution Control Board. Environmental Clearance & CTE/CTO Consent Portal.">
+  <link rel="stylesheet" href="/css/pollution-style.css">
+  <script src="/samanvay-config.js"></script>
+</head>
+<body>
+
+  <!-- Tricolor Stripe -->
+  <div class="pol-tricolor"></div>
+
+  <!-- Top Accessibility & Gov Bar -->
+  <div class="pol-topbar no-print">
+    <div>
+      <strong>राज्य शासन</strong> • पर्यावरण विभाग | <strong>STATE POLLUTION CONTROL BOARD • SAMANVAY ENVIRONMENT GATEWAY</strong>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <!-- Permanent Return to SAMANVAY Button -->
+      <a href="http://localhost:5001/dashboard.html?tab=flowchart" id="topSamanvayBtn" class="pol-btn pol-btn-primary" style="padding: 3px 10px; font-size: 0.78rem; text-decoration: none;">
+        🔙 Return to SAMANVAY Portal
+      </a>
+      <a href="#mainContent">Skip to Main Content</a> |
+      <a href="#" onclick="document.body.style.fontSize='90%'; return false;">A-</a>
+      <a href="#" onclick="document.body.style.fontSize='100%'; return false;">A</a>
+      <a href="#" onclick="document.body.style.fontSize='110%'; return false;">A+</a> |
+      <a href="#" style="font-weight: 700; color: #81c784;">English</a>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="pol-header no-print">
+    <div class="pol-header-brand">
+      <div class="pol-emblem">🌿</div>
+      <div class="pol-header-titles">
+        <h1>SAMANVAY Pollution Control Department</h1>
+        <p>State Pollution Control Board • Department of Environment | SAMANVAY Single-Window Clearance</p>
+      </div>
+    </div>
+    <div class="pol-header-badge">
+      <span>SAMANVAY Gateway</span>
+      Consent to Establish (CTE) & Operate (CTO)
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="pol-nav no-print" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; gap: 4px;">
+      <a href="#" id="nav-status" class="active" onclick="switchTab('status'); return false;">
+        🌿 पर्यावरण संमती स्थिती (Consent & Clearance Status)
+      </a>
+      <a href="#" id="nav-category" onclick="switchTab('category'); return false;">
+        📑 उद्योग प्रदूषण श्रेणी (Red/Orange/Green/White)
+      </a>
+      <a href="#" id="nav-apply" onclick="switchTab('apply'); return false;">
+        ✍️ नवीन संमती अर्ज (Apply CTE/CTO Clearance)
+      </a>
+      <a href="#" id="nav-notice" onclick="switchTab('notice'); return false;">
+        📢 पर्यावरण सूचना व सुनावणी (Public Notices)
+      </a>
+      <a href="#" id="nav-database" onclick="switchTab('database'); return false;">
+        🗄️ विभाग डेटाबेस व REST API (Database & API)
+      </a>
+    </div>
+
+    <!-- Right Side Return Button in Nav Bar -->
+    <a href="http://localhost:5001/dashboard.html?tab=flowchart" id="navSamanvayBtn" class="pol-btn pol-btn-outline" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 700; margin-right: 12px; text-decoration: none;">
+      🔙 SAMANVAY Portal ➔
+    </a>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="pol-container" id="mainContent">
+
+    <!-- Global Application Submission Success Toast -->
+    <div id="submissionSuccessBanner" class="pol-handoff pol-handoff-return" style="display: none;">
+      <div class="pol-handoff-title">✅ पर्यावरण संमती पायरी पूर्ण (Pollution step complete)</div>
+      <p id="submissionSuccessMsg" style="font-weight: 700; color: #166534;"></p>
+      <p>
+        पुढची पायरी: सर्व मंजुरी पूर्ण झाल्या. समन्वय कडे परत जा — तिथे तुमचा अंतिम अहवाल दिसेल.<br>
+        Next step: All clearances complete. Return to Samanvay to view your final dashboard.
+      </p>
+      <button type="button" id="returnBtn" class="pol-btn pol-btn-handoff">
+        ↩ समन्वय कडे परत जा व पुढे चला (Return to Samanvay and continue ➔)
+      </button>
+    </div>
+
+    <!-- =========================================================================
+         TAB 1: CONSENT & CLEARANCE STATUS (HOME TAB)
+         ========================================================================= -->
+    <section id="section-status">
+      <!-- Search Filter Card -->
+      <div class="pol-card no-print">
+        <div class="pol-card-header">
+          <span>🔍 पर्यावरण संमती व दाखला पडताळणी (Search Environmental Fact Sheet)</span>
+          <span style="font-size: 0.82rem; color: #4f6e5c;">Industrial Consent to Establish & Operate Verification</span>
+        </div>
+        <div class="pol-card-body">
+
+          <!-- Presets -->
+          <div style="margin-bottom: 12px; font-size: 0.85rem; font-weight: 700; color: var(--pol-green);">
+            🌿 प्रात्यक्षिक उदाहरणे (Quick Demo Presets - Click to Search):
+          </div>
+          <div class="pol-presets">
+            <span class="pol-pill" onclick="presetPollLookup('MPCB-8821')">
+              MPCB-8821 (ABC Industries · Green Category · APPROVED CTE)
+            </span>
+            <span class="pol-pill" onclick="presetPollLookup('MPCB-8822')">
+              MPCB-8822 (XYZ Manufacturing · Chemical Plant · PENDING)
+            </span>
+            <span class="pol-pill" onclick="presetPollLookup('MPCB-8823')">
+              MPCB-8823 (DEF Industries · Orange Category · CTO Valid)
+            </span>
+            <span class="pol-pill" onclick="presetPollLookup('MPCB-8999')">
+              MPCB-8999 (Simulated Outage Test Record)
+            </span>
+          </div>
+
+          <!-- Input Box & Action -->
+          <form onsubmit="handleSearchPoll(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="pol-form-group" style="flex: 1; min-width: 260px;">
+                <label class="pol-label">अर्ज क्रमांक / पॅन प्रविष्ट करा (Application No / PAN) <span class="req">*</span></label>
+                <input type="text" id="pollQuery" class="pol-input" placeholder="उदा. MPCB-8821 किंवा ABCDE1234F" value="MPCB-8821" required>
+              </div>
+              <button type="submit" class="pol-btn pol-btn-primary" style="height: 42px;">
+                🔎 पर्यावरण संमती पहा (Fetch Consent Facts)
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Result Display Container -->
+      <div id="resultPoll">
+        <!-- Certificate / Sheet rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 2: INDUSTRY CATEGORY VERIFICATION
+         ========================================================================= -->
+    <section id="section-category" style="display: none;">
+      <div class="pol-card no-print">
+        <div class="pol-card-header">
+          <span>📑 उद्योग प्रदूषण श्रेणी वर्गीकरण (Industry Classification - Red/Orange/Green)</span>
+        </div>
+        <div class="pol-card-body">
+          <p style="font-size: 0.9rem; color: var(--pol-text-muted); margin-bottom: 14px;">
+            पर्यावरण प्रदूषण निर्देशांकानुसार उद्योगाचे वर्गीकरण व आवश्यक संमती कालावधी.
+          </p>
+          <div class="pol-grid-4">
+            <div style="background: #fef2f2; border: 1px solid #fca5a5; padding: 14px; border-radius: 6px;">
+              <h4 style="color: #991b1b; margin-bottom: 6px;">🔴 RED CATEGORY</h4>
+              <p style="font-size: 0.82rem; color: #7f1d1d;">Heavy Pollution Index (> 60). Detailed EIA clearance required. Validity: 5 Years.</p>
+            </div>
+            <div style="background: #fff7ed; border: 1px solid #ffedd5; padding: 14px; border-radius: 6px;">
+              <h4 style="color: #c2410c; margin-bottom: 6px;">🟠 ORANGE CATEGORY</h4>
+              <p style="font-size: 0.82rem; color: #9a3412;">Moderate Pollution Index (41-59). Standard CTE/CTO consent. Validity: 10 Years.</p>
+            </div>
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 6px;">
+              <h4 style="color: #15803d; margin-bottom: 6px;">🟢 GREEN CATEGORY</h4>
+              <p style="font-size: 0.82rem; color: #166534;">Low Pollution Index (21-40). Fast-track single-window CTE clearance. Validity: 15 Years.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 6px;">
+              <h4 style="color: #475569; margin-bottom: 6px;">⚪ WHITE CATEGORY</h4>
+              <p style="font-size: 0.82rem; color: #334155;">Non-polluting (< 20). Exempted from CTE/CTO, simple intimation only.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 3: APPLY NEW CONSENT (FORM)
+         ========================================================================= -->
+    <section id="section-apply" style="display: none;">
+      <div class="pol-card">
+        <div class="pol-card-header">
+          <span>✍️ नवीन पर्यावरण संमती अर्ज (Apply CTE / CTO Clearance)</span>
+          <button type="button" onclick="fetchPollProfile()" class="pol-btn pol-btn-outline" style="padding: 4px 12px; font-size: 0.8rem;">
+            🔄 DB Auto-Fill
+          </button>
+        </div>
+        <div class="pol-card-body">
+
+          <div id="pollAutoFillBar" style="display:none; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 16px; margin-bottom:16px; font-size:0.84rem; color:#1e40af;">
+            <span id="pollAutoFillMsg">Fetching profile from database...</span>
+          </div>
+
+          <form onsubmit="handleApplyPollSubmit(event)">
+            <div class="pol-grid-2">
+              <div class="pol-form-group">
+                <label class="pol-label">SAMANVAY App ID / Ref</label>
+                <input type="text" id="appId" class="pol-input" readonly placeholder="Auto-assigned">
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">कंपनी / उद्योगाचे नाव (Enterprise Name) <span class="req">*</span></label>
+                <input type="text" id="companyName" class="pol-input" placeholder="उदा. ABC Industries Pvt Ltd" required>
+              </div>
+            </div>
+
+            <div class="pol-grid-2">
+              <div class="pol-form-group">
+                <label class="pol-label">उद्योगाचा पॅन क्रमांक (Enterprise PAN) <span class="req">*</span></label>
+                <input type="text" id="pan" class="pol-input" placeholder="उदा. ABCDE1234F" style="text-transform: uppercase;" required>
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">प्रकल्पाचे नाव (Project / Unit Name)</label>
+                <input type="text" id="projectName" class="pol-input" placeholder="उदा. Green Chemical Plant Phase 1">
+              </div>
+            </div>
+
+            <div class="pol-grid-4">
+              <div class="pol-form-group">
+                <label class="pol-label">पर्यावरण श्रेणी (Pollution Category)</label>
+                <select class="pol-select" id="industryCategory">
+                  <option value="Green Category">Green Category (Fast-Track)</option>
+                  <option value="Orange Category">Orange Category</option>
+                  <option value="Red Category">Red Category</option>
+                </select>
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">संमतीचा प्रकार (Consent Type)</label>
+                <select class="pol-select" id="consentType">
+                  <option value="CTE">Consent to Establish (CTE)</option>
+                  <option value="CTO">Consent to Operate (CTO)</option>
+                </select>
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">पाण्याचा वापर (Water KLD)</label>
+                <input type="number" id="water" class="pol-input" placeholder="उदा. 5" value="5">
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">घनकचरा (Solid Waste Kg/day)</label>
+                <input type="number" id="solidWaste" class="pol-input" placeholder="उदा. 10" value="10">
+              </div>
+            </div>
+
+            <div class="pol-grid-2">
+              <div class="pol-form-group">
+                <label class="pol-label">विभाग / जिल्हा (Region / District)</label>
+                <input type="text" id="region" class="pol-input" value="Industrial Zone">
+              </div>
+              <div class="pol-form-group">
+                <label class="pol-label">प्लांटचा पत्ता (Plant Location) <span class="req">*</span></label>
+                <input type="text" id="location" class="pol-input" placeholder="Plot No 42, Industrial Estate" value="Plot 42, Industrial Zone" required>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+              <button type="submit" class="pol-btn pol-btn-primary" id="submitBtn">
+                🌿 संमती अर्ज दाखल करा (Submit Consent Application)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 4: PUBLIC NOTICES
+         ========================================================================= -->
+    <section id="section-notice" style="display: none;">
+      <div class="pol-card">
+        <div class="pol-card-header">
+          <span>📢 पर्यावरणीय सार्वजनिक सुनावणी व सूचना (Environment Notices)</span>
+        </div>
+        <div class="pol-card-body" id="resultNotice">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 5: DATABASE & REST API
+         ========================================================================= -->
+    <section id="section-database" style="display: none;">
+      <div class="pol-card">
+        <div class="pol-card-header">
+          <span>🗄️ प्रदूषण नियंत्रण समिति - API व डेटाबेस (OpenAPI Documentation)</span>
+          <a href="/api/info" target="_blank" class="pol-btn pol-btn-outline" style="padding: 4px 12px; font-size: 0.8rem;">
+            📡 Info API (/api/info)
+          </a>
+        </div>
+        <div class="pol-card-body" id="resultDatabase">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="pol-footer no-print">
+    <p>
+      <strong>SAMANVAY POLLUTION CONTROL DEPARTMENT</strong> | Department of Environment, State Government
+    </p>
+    <p style="font-size: 0.78rem; color: #a5d6a7;">
+      Single-Window Fast-Track Consent Portal • Integrated with SAMANVAY Government Interoperability Layer
+    </p>
+    <p style="font-size: 0.75rem; margin-top: 8px;">
+      <a href="http://localhost:5001/dashboard.html?tab=flowchart" id="footerSamanvayBtn" style="color: #81c784; font-weight: 700; text-decoration: underline;">
+        🔙 Return to SAMANVAY Main Portal
+      </a>
+    </p>
+  </footer>
+
+  <script src="/js/pollution-app.js"></script>
+</body>
+</html>

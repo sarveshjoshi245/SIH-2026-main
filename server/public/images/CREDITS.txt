@@ -1,0 +1,7 @@
+gateway-of-india.jpg
+  Title:    The Gateway of India in Mumbai, India (13 March 2016)
+  Author:   A.Savin
+  Credit:   "A.Savin, Wikipedia" (as requested on the file page)
+  Source:   https://commons.wikimedia.org/wiki/File:Mumbai_03-2016_30_Gateway_of_India.jpg
+            (1280px rendition served by upload.wikimedia.org; file not modified)
+  Licence:  Free Art License (Commons template {{FAL}}), https://artlibre.org/licence/lal/en/

@@ -1,0 +1,261 @@
+{
+  "divisions": [
+    {
+      "id": "pune",
+      "name_en": "Pune Division",
+      "name_mr": "पुणे विभाग",
+      "districts": [
+        {
+          "id": "pune",
+          "name_en": "Pune",
+          "name_mr": "पुणे",
+          "talukas": [
+            {
+              "id": "haveli",
+              "name_en": "Haveli",
+              "name_mr": "हवेली",
+              "villages": [
+                { "id": "wagholi", "name_en": "Wagholi", "name_mr": "वाघोली" },
+                { "id": "hadapsar", "name_en": "Hadapsar", "name_mr": "हडपसर" },
+                { "id": "khadakwasla", "name_en": "Khadakwasla", "name_mr": "खडकवासला" },
+                { "id": "demo", "name_en": "Demo", "name_mr": "डेमो" }
+              ]
+            },
+            {
+              "id": "mulshi",
+              "name_en": "Mulshi",
+              "name_mr": "मुळशी",
+              "villages": [
+                { "id": "pirangut", "name_en": "Pirangut", "name_mr": "पिरंगुट" },
+                { "id": "hinjawadi", "name_en": "Hinjawadi", "name_mr": "हिंजवडी" },
+                { "id": "paud", "name_en": "Paud", "name_mr": "पौड" }
+              ]
+            },
+            {
+              "id": "baramati",
+              "name_en": "Baramati",
+              "name_mr": "बारामती",
+              "villages": [
+                { "id": "malegaon", "name_en": "Malegaon", "name_mr": "माळेगाव" },
+                { "id": "baramati_rural", "name_en": "Baramati Rural", "name_mr": "बारामती ग्रामीण" }
+              ]
+            },
+            {
+              "id": "khed",
+              "name_en": "Khed (Rajgurunagar)",
+              "name_mr": "खेड (राजगुरुनगर)",
+              "villages": [
+                { "id": "chakan", "name_en": "Chakan", "name_mr": "चाकण" },
+                { "id": "alandi", "name_en": "Alandi", "name_mr": "आळंदी" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "satara",
+          "name_en": "Satara",
+          "name_mr": "सातारा",
+          "talukas": [
+            {
+              "id": "karad",
+              "name_en": "Karad",
+              "name_mr": "कराड",
+              "villages": [
+                { "id": "ogalewadi", "name_en": "Ogalewadi", "name_mr": "ओगलेवाडी" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "kolhapur",
+          "name_en": "Kolhapur",
+          "name_mr": "कोल्हापूर",
+          "talukas": [
+            {
+              "id": "karveer",
+              "name_en": "Karveer",
+              "name_mr": "करवीर",
+              "villages": [
+                { "id": "shiroli", "name_en": "Shiroli", "name_mr": "शिरोली" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "konkan",
+      "name_en": "Konkan Division",
+      "name_mr": "कोकण विभाग",
+      "districts": [
+        {
+          "id": "raigad",
+          "name_en": "Raigad",
+          "name_mr": "रायगड",
+          "talukas": [
+            {
+              "id": "panvel",
+              "name_en": "Panvel",
+              "name_mr": "पनवेल",
+              "villages": [
+                { "id": "karanjade", "name_en": "Karanjade", "name_mr": "करंजाडे" },
+                { "id": "kalamboli", "name_en": "Kalamboli", "name_mr": "कळंबोली" },
+                { "id": "talojamidc", "name_en": "Taloja MIDC", "name_mr": "तळोजा एमआयडीसी" }
+              ]
+            },
+            {
+              "id": "alibag",
+              "name_en": "Alibag",
+              "name_mr": "अलिबाग",
+              "villages": [
+                { "id": "varsoli", "name_en": "Varsoli", "name_mr": "वरसोली" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "thane",
+          "name_en": "Thane",
+          "name_mr": "ठाणे",
+          "talukas": [
+            {
+              "id": "bhiwandi",
+              "name_en": "Bhiwandi",
+              "name_mr": "भिवंडी",
+              "villages": [
+                { "id": "padgha", "name_en": "Padgha", "name_mr": "पडघा" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "palghar",
+          "name_en": "Palghar",
+          "name_mr": "पालघर",
+          "talukas": [
+            {
+              "id": "vasai",
+              "name_en": "Vasai",
+              "name_mr": "वसई",
+              "villages": [
+                { "id": "virar", "name_en": "Virar", "name_mr": "विरार" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nashik",
+      "name_en": "Nashik Division",
+      "name_mr": "नाशिक विभाग",
+      "districts": [
+        {
+          "id": "nashik",
+          "name_en": "Nashik",
+          "name_mr": "नाशिक",
+          "talukas": [
+            {
+              "id": "niphad",
+              "name_en": "Niphad",
+              "name_mr": "निफाड",
+              "villages": [
+                { "id": "lasalgaon", "name_en": "Lasalgaon", "name_mr": "लासलगाव" },
+                { "id": "pimpalgaon", "name_en": "Pimpalgaon Baswant", "name_mr": "पिंपळगाव बसवंत" }
+              ]
+            },
+            {
+              "id": "sinnar",
+              "name_en": "Sinnar",
+              "name_mr": "सिन्नर",
+              "villages": [
+                { "id": "musalgaon", "name_en": "Musalgaon MIDC", "name_mr": "मुसळगाव" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ahmednagar",
+          "name_en": "Ahilyanagar (Ahmednagar)",
+          "name_mr": "अहिल्यानगर (अहमदनगर)",
+          "talukas": [
+            {
+              "id": "shrirampur",
+              "name_en": "Shrirampur",
+              "name_mr": "श्रीरामपूर",
+              "villages": [
+                { "id": "belapur", "name_en": "Belapur", "name_mr": "बेलापूर" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chhatrapati_sambhajinagar",
+      "name_en": "Chhatrapati Sambhajinagar Division",
+      "name_mr": "छत्रपती संभाजीनगर विभाग (औरंगाबाद)",
+      "districts": [
+        {
+          "id": "csn",
+          "name_en": "Chhatrapati Sambhajinagar",
+          "name_mr": "छत्रपती संभाजीनगर",
+          "talukas": [
+            {
+              "id": "waluj",
+              "name_en": "Gangapur (Waluj MIDC)",
+              "name_mr": "गंगापूर (वाळूज)",
+              "villages": [
+                { "id": "waluj_vlg", "name_en": "Waluj", "name_mr": "वाळूज" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "amravati",
+      "name_en": "Amravati Division",
+      "name_mr": "अमरावती विभाग",
+      "districts": [
+        {
+          "id": "amravati",
+          "name_en": "Amravati",
+          "name_mr": "अमरावती",
+          "talukas": [
+            {
+              "id": "achlapur",
+              "name_en": "Achalpur",
+              "name_mr": "अचलपूर",
+              "villages": [
+                { "id": "paratsawada", "name_en": "Paratwada", "name_mr": "परतवाडा" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nagpur",
+      "name_en": "Nagpur Division",
+      "name_mr": "नागपूर विभाग",
+      "districts": [
+        {
+          "id": "nagpur",
+          "name_en": "Nagpur",
+          "name_mr": "नागपूर",
+          "talukas": [
+            {
+              "id": "hingna",
+              "name_en": "Hingna (Butibori MIDC)",
+              "name_mr": "हिंगणा (बुटीबोरी)",
+              "villages": [
+                { "id": "butibori", "name_en": "Butibori", "name_mr": "बुटीबोरी" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

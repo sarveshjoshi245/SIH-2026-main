@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  # ─── LAND API (Node.js, port 4000) ────────────────────────────────────────
+  land_api:
+    build:
+      context: ../land_api
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - interop_net
+
+  # ─── ELECTRICITY DEPARTMENT API (FastAPI, port 8000) ──────────────────────
+  electricity_api:
+    build:
+      context: ../electricity_department_api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+    networks:
+      - interop_net
+
+  # ─── POLLUTION API (Node.js, port 4002) ───────────────────────────────────
+  pollution_api:
+    build:
+      context: ../pollution_api/pollution_api
+    ports:
+      - "4002:4002"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - interop_net
+
+  # ─── INTEROPERABILITY PLATFORM BACKEND (FastAPI, port 5000) ──────────────
+  interop_backend:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      - LAND_API_URL=http://land_api:4000
+      - ELECTRICITY_API_URL=http://electricity_api:8000
+      - POLLUTION_API_URL=http://pollution_api:4002
+      - LAND_API_KEY=interop-demo-key-001
+      - ELECTRICITY_API_KEY=elec_live_interop_key_991
+      - POLLUTION_API_KEY=interop-demo-key-001
+      - JWT_SECRET_KEY=sih26129_super_secret_jwt_key_for_interop_platform_2026
+      - DATABASE_URL=sqlite:///./interop_platform.db
+    depends_on:
+      - land_api
+      - electricity_api
+      - pollution_api
+    networks:
+      - interop_net
+    volumes:
+      - interop_db:/app/data
+
+networks:
+  interop_net:
+    driver: bridge
+
+volumes:
+  interop_db:

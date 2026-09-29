@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>महाभूलेख (महाराष्ट्र भूमी अभिलेख) | महसूल व वन विभाग, महाराष्ट्र शासन</title>
+  <meta name="description" content="महाराष्ट्र शासन महसूल व वन विभाग - महाभूलेख (MahaBhulekh / Bhumi Abhilekh). अधिकृत सातबारा उतारा (गाव नमुना ७ व १२), ८-अ खाते उतारा, ई-फेरफार व आपली चावडी.">
+  <link rel="stylesheet" href="/css/land-style.css">
+  <script src="/samanvay-config.js"></script>
+</head>
+<body>
+
+  <!-- Tricolor Stripe -->
+  <div class="mb-tricolor"></div>
+
+  <!-- Top Accessibility & Gov Bar -->
+  <div class="mb-topbar no-print">
+    <div>
+      <strong>महाराष्ट्र शासन</strong> • महसूल व वन विभाग | <strong>GOVERNMENT OF MAHARASHTRA</strong>
+    </div>
+    <div>
+      <a href="#mainContent">मुख्य मजकुराकडे जा (Skip to Main)</a> |
+      <a href="#" onclick="document.body.style.fontSize='90%'; return false;">A-</a>
+      <a href="#" onclick="document.body.style.fontSize='100%'; return false;">A</a>
+      <a href="#" onclick="document.body.style.fontSize='110%'; return false;">A+</a> |
+      <a href="#" onclick="setLanguage('mr'); return false;" style="font-weight: 700; color: #ffd700;">मराठी</a> |
+      <a href="#" onclick="setLanguage('en'); return false;">English</a>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="mb-header no-print">
+    <div class="mb-header-brand">
+      <div class="mb-emblem">🏛️</div>
+      <div class="mb-header-titles">
+        <h1>महाभूलेख (महाराष्ट्र भूमी अभिलेख)</h1>
+        <p>महसूल व वन विभाग, महाराष्ट्र शासन • MahaBhulekh Portal (Land Records Department)</p>
+      </div>
+    </div>
+    <div class="mb-header-badge">
+      <span>ई-महाभूमी प्रकल्प</span>
+      डिजिटल ७/१२ व ८-अ उतारा प्रणाली
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="mb-nav no-print">
+    <a href="#" id="nav-7-12" onclick="switchTab('7-12'); return false;">
+      📄 गाव नमुना ७/१२ (7/12 Extract)
+    </a>
+    <a href="#" id="nav-8-a" onclick="switchTab('8-a'); return false;">
+      📑 गाव नमुना ८-अ (8-A Holding)
+    </a>
+    <a href="#" id="nav-ferfar" onclick="switchTab('ferfar'); return false;">
+      📝 ई-फेरफार (e-Ferfar)
+    </a>
+    <a href="#" id="nav-aapli-chawadi" onclick="switchTab('aapli-chawadi'); return false;">
+      📢 आपली चावडी (Aapli Chawadi)
+    </a>
+    <a href="#" id="nav-apply" class="active" onclick="switchTab('apply'); return false;">
+      ✍️ नवीन फेरफार अर्ज (Apply)
+    </a>
+    <a href="#" id="nav-all-records" onclick="switchTab('all-records'); return false;">
+      🗄️ सर्व रेकॉर्ड्स (Database)
+    </a>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="mb-container" id="mainContent">
+
+    <!-- =========================================================================
+         HERO: DIVISION SELECTION BOX
+         ========================================================================= -->
+    <div class="mb-division-box no-print">
+      <div class="mb-division-title">
+        📍 महसूल विभाग निवडा (Select Administrative Division)
+      </div>
+      <div class="mb-division-subtitle">
+        आपल्या जमिनीचा सातबारा किंवा फेरफार पाहण्यासाठी संबंधित महसूल विभागावर क्लिक करा:
+      </div>
+      <div class="mb-division-grid" id="divisionGrid">
+        <!-- Injected dynamically via land-app.js -->
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 1: 7/12 EXTRACT (सातबारा उतारा)
+         ========================================================================= -->
+    <section id="section-7-12" style="display: none;">
+      <!-- Search Filter Card -->
+      <div class="mb-card no-print" id="searchCard">
+        <div class="mb-card-header">
+          <span>🔍 ७/१२ उतारा शोध (Search Form VII & XII)</span>
+          <span style="font-size: 0.82rem; color: #555;">अधिकार अभिलेख व पीक पाहणी</span>
+        </div>
+        <div class="mb-card-body">
+          
+          <!-- Presets -->
+          <div style="margin-bottom: 12px; font-size: 0.85rem; font-weight: 700; color: var(--mb-maroon);">
+            ⚡ प्रात्यक्षिक उदाहरणे (Quick Demo Presets):
+          </div>
+          <div class="mb-presets">
+            <span class="mb-pill" onclick="presetLookup('101', 'Pune', 'Haveli', 'Wagholi')">
+              गट क्र. १०१ (ABC Industries · वाघोली, पुणे · मंजूर ७/१२)
+            </span>
+            <span class="mb-pill" onclick="presetLookup('102', 'Pune', 'Haveli', 'Wagholi')">
+              गट क्र. १०२ (ABC Industries · १२.५ हेक्टर · मंजूर)
+            </span>
+            <span class="mb-pill" onclick="presetLookup('103', 'Pune', 'Mulshi', 'Pirangut')">
+              गट क्र. १०३ (पिरंगुट, मुळशी · प्रलंबित फेरफार)
+            </span>
+            <span class="mb-pill" onclick="presetLookup('105', 'Raigad', 'Panvel', 'Karanjade')">
+              गट क्र. १०५ (करंजाडे, पनवेल · बँक कर्ज बोजा)
+            </span>
+            <span class="mb-pill" onclick="presetLookup('104', 'Nashik', 'Niphad', 'Lasalgaon')">
+              गट क्र. १०४ (लासलगाव, निफाड · नाशिक शेती)
+            </span>
+            <span class="mb-pill" onclick="presetLookup('201', 'Pune', 'Baramati', 'Malegaon')">
+              गट क्र. २०१ (माळेगाव, बारामती · बागायत ऊस)
+            </span>
+          </div>
+
+          <!-- Cascading Dropdowns -->
+          <div class="mb-grid-4">
+            <div class="mb-form-group">
+              <label class="mb-label">जिल्हा (District) <span class="req">*</span></label>
+              <select id="selDistrict" class="mb-select" onchange="onDistrictChange()"></select>
+            </div>
+            <div class="mb-form-group">
+              <label class="mb-label">तालुका (Taluka) <span class="req">*</span></label>
+              <select id="selTaluka" class="mb-select" onchange="onTalukaChange()"></select>
+            </div>
+            <div class="mb-form-group">
+              <label class="mb-label">गाव (Village) <span class="req">*</span></label>
+              <select id="selVillage" class="mb-select"></select>
+            </div>
+            <div class="mb-form-group">
+              <label class="mb-label">शोध प्रकार (Search Mode)</label>
+              <select class="mb-select" id="selSearchMode">
+                <option value="survey">गट / सर्व्हे नंबर द्वारे</option>
+                <option value="khata">खाते क्रमांक द्वारे</option>
+                <option value="name">खातेदाराच्या नावाद्वारे</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Radio Selector as in Real MahaBhulekh -->
+          <div class="mb-radio-group">
+            <label class="mb-radio-label">
+              <input type="radio" name="searchRadio" id="radioSurvey" value="survey" checked>
+              सर्व्हे नंबर / गट नंबर (Survey / Gat No)
+            </label>
+            <label class="mb-radio-label">
+              <input type="radio" name="searchRadio" id="radioKhata" value="khata">
+              खाते क्रमांक (Khata No)
+            </label>
+            <label class="mb-radio-label">
+              <input type="radio" name="searchRadio" id="radioName" value="name">
+              पहिले / मधले / आडनाव (Owner Name)
+            </label>
+            <label class="mb-radio-label">
+              <input type="radio" name="searchRadio" id="radioPan" value="pan">
+              पॅन क्रमांक (PAN)
+            </label>
+          </div>
+
+          <!-- Input Box & Action -->
+          <form id="form712" onsubmit="handleSearch712(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+              <div class="mb-form-group" style="flex: 1; min-width: 240px;">
+                <label class="mb-label">गट क्र. / खाते क्र. / नाव प्रविष्ट करा (Enter Query) <span class="req">*</span></label>
+                <input type="text" id="searchQuery" class="mb-input" placeholder="उदा. 101 किंवा ABC Industries किंवा ABCDE1234F" value="101" required>
+              </div>
+              <button type="submit" class="mb-btn mb-btn-primary" id="btnSearch712" style="height: 42px;">
+                🔎 सातबारा पहा (Fetch 7/12 Extract)
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Result 7/12 Display Container -->
+      <div id="result712">
+        <!-- Satbara sheet rendered here -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 2: 8-A EXTRACT (गाव नमुना ८-अ)
+         ========================================================================= -->
+    <section id="section-8-a" style="display: none;">
+      <div class="mb-card no-print">
+        <div class="mb-card-header">
+          <span>📑 गाव नमुना ८-अ (८-अ खाते उतारा शोध)</span>
+        </div>
+        <div class="mb-card-body">
+          <p style="font-size: 0.9rem; color: var(--mb-text-muted); margin-bottom: 14px;">
+            एकाच गावातील खातेदाराच्या नावावर असलेल्या सर्व सर्व्हे/गट नंबरच्या जमिनीचे एकूण क्षेत्र व आकारणी.
+          </p>
+          <form onsubmit="handleSearch8A(event)">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <div class="mb-form-group" style="flex: 1; min-width: 240px;">
+                <label class="mb-label">खाते क्रमांक किंवा PAN किंवा नाव प्रविष्ट करा <span class="req">*</span></label>
+                <input type="text" id="search8AQuery" class="mb-input" placeholder="उदा. 452 किंवा ABCDE1234F" value="452" required>
+              </div>
+              <button type="submit" class="mb-btn mb-btn-primary" style="height: 42px; align-self: flex-end;">
+                🔎 ८-अ उतारा पहा
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="result8A"></div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 3: E-FERFAR (ई-फेरफार नोंद)
+         ========================================================================= -->
+    <section id="section-ferfar" style="display: none;">
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <span>📝 ई-फेरफार डिजिटल नोंदवही (e-Ferfar Mutation Register)</span>
+          <button class="mb-btn mb-btn-outline" onclick="fetchFerfarRecords()" style="padding: 4px 12px; font-size: 0.8rem;">
+            🔄 रीफ्रेश (Refresh)
+          </button>
+        </div>
+        <div class="mb-card-body" id="resultFerfar">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 4: AAPLI CHAWADI (आपली चावडी डिजिटल फलक)
+         ========================================================================= -->
+    <section id="section-aapli-chawadi" style="display: none;">
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <span>📢 आपली चावडी — १३५-ड नोटीस फलक (Village Notice Board)</span>
+        </div>
+        <div class="mb-card-body" id="resultAapliChawadi">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 5: APPLY (नवीन फेरफार / अकृषिक अर्ज)
+         ========================================================================= -->
+    <section id="section-apply">
+      <!-- Samanvay hand-off banner: shown only when opened from the Samanvay dashboard (?app_id=…) -->
+      <div id="samanvayHandoff" class="mb-handoff" hidden>
+        <div class="mb-handoff-title">🔗 समन्वय मधून आलात (Opened from Samanvay)</div>
+        <ol class="mb-handoff-steps">
+          <li class="done">✓ तुमची माहिती आधीच भरली आहे (Your details are pre-filled)</li>
+          <li class="current">➔ खालील अर्ज तपासा व दाखल करा (Check and submit the application below)</li>
+          <li>समन्वय कडे परत जा — पुढची पायरी: वीज जोडणी (Return to Samanvay — next step: Electricity)</li>
+        </ol>
+        <div id="samanvayProfileMsg" class="mb-handoff-msg"></div>
+      </div>
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <span>✍️ नवीन फेरफार / ७/१२ नोंदणी अर्ज (Citizen / Industrial Application)</span>
+        </div>
+        <div class="mb-card-body">
+          <form onsubmit="handleApplySubmit(event)">
+            <div class="mb-grid-2">
+              <div class="mb-form-group">
+                <label class="mb-label">सर्व्हे नंबर / गट क्रमांक (Gat No) <span class="req">*</span></label>
+                <input type="text" id="applySurvey" class="mb-input" placeholder="उदा. 106" required>
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label">अर्जदार पॅन क्रमांक (Applicant PAN) <span class="req">*</span></label>
+                <input type="text" id="applyPan" class="mb-input" placeholder="उदा. ABCDE1234F" style="text-transform: uppercase;" required>
+              </div>
+            </div>
+
+            <div class="mb-grid-2">
+              <div class="mb-form-group">
+                <label class="mb-label">अर्जदार / कंपनीचे नाव (Applicant / Enterprise Name) <span class="req">*</span></label>
+                <input type="text" id="applyName" class="mb-input" placeholder="उदा. ABC Industries Pvt Ltd" required>
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label">जमिनीचे क्षेत्र (Area in Hectares) <span class="req">*</span></label>
+                <input type="number" step="0.01" id="applyArea" class="mb-input" placeholder="उदा. 5.50" required>
+              </div>
+            </div>
+
+            <div class="mb-grid-4">
+              <div class="mb-form-group">
+                <label class="mb-label">जिल्हा (District)</label>
+                <input type="text" id="applyDistrict" class="mb-input" value="Pune">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label">तालुका (Taluka)</label>
+                <input type="text" id="applyTaluka" class="mb-input" value="Haveli">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label">गाव (Village)</label>
+                <input type="text" id="applyVillage" class="mb-input" value="Wagholi">
+              </div>
+              <div class="mb-form-group">
+                <label class="mb-label">अर्जाचा प्रकार (Application Type)</label>
+                <select class="mb-select" id="applyType">
+                  <option value="NA">अकृषिक परवानगी (NA Clearance)</option>
+                  <option value="SALE_DEED">खरेदीखत फेरफार (Sale Deed)</option>
+                  <option value="MUTATION">वारस नोंद / फेरफार</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+              <button type="submit" class="mb-btn mb-btn-primary">
+                📩 अर्ज दाखल करा (Submit Application)
+              </button>
+            </div>
+          </form>
+
+          <div id="applyMsg"></div>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 6: ALL RECORDS / DATABASE & API
+         ========================================================================= -->
+    <section id="section-all-records" style="display: none;">
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <span>🗄️ महाभूलेख डेटाबेस व इंटरऑपरेबिलिटी API (MahaBhulekh Database & REST API)</span>
+          <a href="/api/land/info" target="_blank" class="mb-btn mb-btn-outline" style="padding: 4px 12px; font-size: 0.8rem;">
+            📡 OpenAPI Spec (/api/land/info)
+          </a>
+        </div>
+        <div class="mb-card-body" id="resultAllRecords">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mb-footer no-print">
+    <p>
+      <strong>महाभूलेख • महाराष्ट्र भूमी अभिलेख</strong> | महसूल व वन विभाग, महाराष्ट्र शासन (Government of Maharashtra)
+    </p>
+    <p style="font-size: 0.78rem; color: #8a968f;">
+      डिजिटल इंडिया भूमी अभिलेख आधुनिकीकरण कार्यक्रम (DILRMP) अंतर्गत विकसित • महाराष्ट्र जमीन महसूल संहिता १९६६
+    </p>
+    <p style="font-size: 0.75rem; margin-top: 8px;">
+      Interoperability Gateway Connected • Port 4000 • Integrated with Samanvay Single Window System
+    </p>
+  </footer>
+
+  <script src="/samanvay-config.js"></script>
+  <script src="/js/land-app.js"></script>
+</body>
+</html>

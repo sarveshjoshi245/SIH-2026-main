@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samanvay — Department Control Center</title>
+  <link rel="stylesheet" href="/css/gov-style.css">
+  <script src="/config.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --border-color: #e2e8f0;
+      --header-bg: #1e3a8a;
+      --accent: #2563eb;
+    }
+    body.dark-theme {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --border-color: #334155;
+      --header-bg: #0f172a;
+      --accent: #3b82f6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-main); min-height: 100vh; transition: background 0.2s, color 0.2s; }
+
+    /* Top Navigation Bar */
+    .admin-topbar {
+      background: var(--header-bg);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .admin-topbar__brand { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px; }
+    .admin-topbar__badge { background: #f59e0b; color: #1c1917; padding: 3px 10px; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+    .admin-topbar__right { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; }
+    .theme-toggle-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .theme-toggle-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* Login Modal Overlay */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      padding: 20px;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      color: #0f172a;
+    }
+    .login-card h1 { font-size: 1.5rem; color: #1e3a8a; font-weight: 800; margin-bottom: 6px; }
+    .login-card p { font-size: 0.85rem; color: #64748b; margin-bottom: 24px; line-height: 1.5; }
+    .login-err { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
+
+    /* Dashboard Layout */
+    .admin-wrap { display: none; max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+    .admin-wrap.active { display: block; }
+
+    /* Department Filter Tabs */
+    .dept-tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--border-color); margin-bottom: 28px; overflow-x: auto; padding-bottom: 2px; }
+    .dept-tab {
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-sub);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -4px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dept-tab:hover { color: var(--accent); background: rgba(37,99,235,0.05); border-radius: 8px 8px 0 0; }
+    .dept-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .dept-tab .cnt-badge { background: #cbd5e1; color: #334155; padding: 2px 8px; border-radius: 9999px; font-size: 0.72rem; font-weight: 800; }
+    .dept-tab.active .cnt-badge { background: var(--accent); color: #fff; }
+
+    /* Summary Metric Cards */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px 22px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+    .stat-card__num { font-size: 2.2rem; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 6px; }
+    .stat-card__label { font-size: 0.76rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Filter & Controls Bar */
+    .panel-controls {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .panel-controls__left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .panel-controls__right { display: flex; align-items: center; gap: 10px; }
+
+    .search-input {
+      padding: 8px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: var(--bg-primary);
+      color: var(--text-main);
+      width: 240px;
+    }
+    .filter-select {
+      padding: 8px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: var(--bg-primary);
+      color: var(--text-main);
+    }
+
+    .view-toggle { display: flex; background: var(--bg-primary); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
+    .view-btn { border: none; background: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); cursor: pointer; }
+    .view-btn.active { background: var(--bg-card); color: var(--accent); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+    /* Bulk Action Floating Bar */
+    .bulk-bar {
+      display: none;
+      background: #1e3a8a;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 25px rgba(30,58,138,0.25);
+    }
+    .bulk-bar.active { display: flex; }
+
+    /* Application Table View */
+    .admin-panel-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 28px; }
+    .app-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
+    .app-table th { background: rgba(0,0,0,0.02); padding: 12px 16px; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sub); border-bottom: 1px solid var(--border-color); }
+    .app-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    .app-table tr:hover td { background: rgba(37,99,235,0.03); }
+
+    /* Cards Grid View */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; margin-bottom: 28px; }
+    .app-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s;
+    }
+    .app-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+    /* Status Badges with Pulse */
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.3px; }
+    .badge-pending { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .badge-approved { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .badge-rejected { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .badge-blocked { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; }
+
+    @keyframes pulse-ring { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+    .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse-ring 2s infinite ease-in-out; }
+
+    /* Buttons */
+    .btn-approve { background: #16a34a; color: #fff; border: none; padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: background 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-approve:hover { background: #15803d; }
+    .btn-reject { background: #dc2626; color: #fff; border: none; padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: background 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-reject:hover { background: #b91c1c; }
+    .btn-details { background: var(--bg-primary); color: var(--text-main); border: 1px solid var(--border-color); padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .btn-details:hover { background: rgba(0,0,0,0.05); }
+
+    /* Modal / Drawer */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal-card { background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 32px; width: 100%; max-width: 540px; box-shadow: 0 25px 60px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+    .modal-card h3 { font-size: 1.2rem; color: var(--text-main); font-weight: 800; margin-bottom: 4px; }
+
+    .preset-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 16px 0; }
+    .chip { background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-sub); padding: 4px 10px; border-radius: 9999px; font-size: 0.74rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: #fff; padding: 12px 22px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; z-index: 200; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .toast.success { background: #16a34a; }
+    .toast.error { background: #dc2626; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem; background: var(--bg-primary); color: var(--text-main); }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-sub); }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-wrap" id="loginScreen">
+  <div class="login-card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+      <svg width="42" height="42" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+        <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933"/>
+        <rect x="11" y="19" width="3" height="10" fill="#ffffff"/>
+        <rect x="18.5" y="19" width="3" height="10" fill="#ffffff"/>
+        <rect x="26" y="19" width="3" height="10" fill="#ffffff"/>
+        <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808"/>
+      </svg>
+      <div>
+        <div style="font-size:0.68rem;color:#64748b;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;">Samanvay</div>
+        <h1 style="margin:0;font-size:1.35rem;">Department Control Center</h1>
+      </div>
+    </div>
+    <p>Sign in with your department administrator credentials to review, approve, or reject clearance applications.</p>
+    <div class="login-err" id="loginErr"></div>
+    <div class="form-group">
+      <label>Admin Security Token / Password</label>
+      <input type="password" id="adminPasswordInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <button class="btn-approve" style="width:100%;padding:12px;justify-content:center;font-size:0.9rem;" onclick="doAdminLogin()">
+      Sign In to Control Center ➔
+    </button>
+    <p style="font-size:0.75rem;color:#94a3b8;margin-top:16px;text-align:center;">Demo Security Password: <code style="color:#1e3a8a;font-weight:700;">admin@sih2026</code></p>
+  </div>
+</div>
+
+<!-- TOP HEADER -->
+<div class="admin-topbar" id="adminTopbar" style="display:none;">
+  <div class="admin-topbar__brand">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="8" fill="#ffffff" fill-opacity="0.2"/>
+      <path d="M20 7L8 14V17H32V14L20 7Z" fill="#ff9933"/>
+      <rect x="11" y="19" width="3" height="10" fill="#ffffff"/>
+      <rect x="18.5" y="19" width="3" height="10" fill="#ffffff"/>
+      <rect x="26" y="19" width="3" height="10" fill="#ffffff"/>
+      <rect x="8" y="30" width="24" height="3" rx="1" fill="#138808"/>
+    </svg>
+    <span>Samanvay Department Control Center</span>
+  </div>
+  <div class="admin-topbar__right">
+    <span class="admin-topbar__badge" id="livePendingBadge">0 PENDING</span>
+    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+    <a href="/add-department.html" class="theme-toggle-btn" style="background:#15803d;color:#fff;text-decoration:none;font-weight:700;">➕ Onboard Department</a>
+    <a href="/" style="color:#93c5fd;text-decoration:none;font-weight:600;" target="_blank">Portal Home ↗</a>
+    <a href="#" onclick="doAdminLogout()" style="color:#fca5a5;text-decoration:none;font-weight:600;">Sign out</a>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD CONTENT -->
+<div class="admin-wrap" id="adminWrap">
+
+  <!-- Department Filter Tabs -->
+  <div class="dept-tabs">
+    <button class="dept-tab active" data-dept="ALL" onclick="switchDept('ALL', this)">
+      📋 All Departments <span class="cnt-badge" id="cntALL">0</span>
+    </button>
+    <button class="dept-tab" data-dept="LAND" onclick="switchDept('LAND', this)">
+      🏞️ Land Revenue <span class="cnt-badge" id="cntLAND">0</span>
+    </button>
+    <button class="dept-tab" data-dept="ELECTRICITY" onclick="switchDept('ELECTRICITY', this)">
+      ⚡ Electricity (MSEDCL) <span class="cnt-badge" id="cntELECTRICITY">0</span>
+    </button>
+    <button class="dept-tab" data-dept="POLLUTION" onclick="switchDept('POLLUTION', this)">
+      🌿 Pollution (MPCB) <span class="cnt-badge" id="cntPOLLUTION">0</span>
+    </button>
+  </div>
+
+  <!-- Summary Metric Cards -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card__num" id="statTotal">0</div>
+      <div class="stat-card__label">Total Applications</div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid #f59e0b;">
+      <div class="stat-card__num" style="color:#b45309;" id="statPending">0</div>
+      <div class="stat-card__label">Awaiting Admin Review</div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid #16a34a;">
+      <div class="stat-card__num" style="color:#16a34a;" id="statApproved">0</div>
+      <div class="stat-card__label">Approved & Verified</div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid #dc2626;">
+      <div class="stat-card__num" style="color:#dc2626;" id="statRejected">0</div>
+      <div class="stat-card__label">Rejected</div>
+    </div>
+  </div>
+
+  <!-- Controls & Search Bar -->
+  <div class="panel-controls">
+    <div class="panel-controls__left">
+      <input type="text" id="filterSearch" class="search-input" placeholder="🔍 Search Applicant, PAN, Ref..." oninput="applyFilter()">
+      <select id="filterStatus" class="filter-select" onchange="applyFilter()">
+        <option value="">All Statuses</option>
+        <option value="PENDING">⏳ Pending Review</option>
+        <option value="APPROVED">✓ Approved</option>
+        <option value="REJECTED">✗ Rejected</option>
+      </select>
+      <button class="btn-details" onclick="loadApplications()">🔄 Refresh Data</button>
+      <button class="btn-details" onclick="exportCSV()">📥 Export CSV</button>
+      <button class="btn-approve" onclick="autoApproveAllPending()" style="background:#8b5cf6;">⚡ Auto-Approve All Waves (Video Demo)</button>
+    </div>
+    <div class="panel-controls__right">
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnViewTable" onclick="switchView('table')">📋 Table</button>
+        <button class="view-btn" id="btnViewCards" onclick="switchView('cards')">🎴 Cards</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Action Bar -->
+  <div class="bulk-bar" id="bulkBar">
+    <div>
+      <strong id="bulkCount">0 selected</strong> applications
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-approve" onclick="confirmBulk('APPROVED')">✓ Bulk Approve</button>
+      <button class="btn-reject" onclick="confirmBulk('REJECTED')">✗ Bulk Reject</button>
+    </div>
+  </div>
+
+  <!-- Table View Container -->
+  <div class="admin-panel-card" id="tableViewContainer">
+    <div style="overflow-x:auto;">
+      <table class="app-table" id="appTable">
+        <thead>
+          <tr>
+            <th style="width:36px;"><input type="checkbox" id="selectAllCb" onchange="toggleSelectAll(this)"></th>
+            <th>Ref No.</th>
+            <th>Department</th>
+            <th>Applicant & Company</th>
+            <th>Company PAN</th>
+            <th>Project Details</th>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appTableBody">
+          <tr><td colspan="9"><div class="empty-state">Loading applications...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Cards Grid View Container -->
+  <div class="cards-grid" id="cardsViewContainer" style="display:none;"></div>
+
+</div>
+
+<!-- REVIEW / DETAILS MODAL -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+      <div>
+        <h3 id="modalRefNo">REF-xxx</h3>
+        <p style="font-size:0.8rem;color:var(--text-sub);" id="modalDeptLabel">Department Review</p>
+      </div>
+      <span class="badge badge-pending" id="modalStatusBadge">PENDING</span>
+    </div>
+
+    <div style="background:var(--bg-primary);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:0.82rem;line-height:1.6;">
+      <div><strong>Applicant:</strong> <span id="modalApplicantName">—</span></div>
+      <div><strong>PAN Number:</strong> <code id="modalPan">—</code></div>
+      <div><strong>Project Name:</strong> <span id="modalProjectName">—</span></div>
+      <div><strong>District:</strong> <span id="modalDistrict">—</span></div>
+      <div><strong>Ref/Survey No:</strong> <span id="modalRefNumber">—</span></div>
+      <div><strong>Submission Date:</strong> <span id="modalSubmittedAt">—</span></div>
+    </div>
+
+    <div class="form-group">
+      <label>Preset Remarks (Click to insert):</label>
+      <div class="preset-chips">
+        <span class="chip" onclick="insertChip('Title deed verified and 7/12 extract clear.')">✓ Land Title Clear</span>
+        <span class="chip" onclick="insertChip('MSEDCL Grid feeder load sanctioned.')">✓ Power Load Sanctioned</span>
+        <span class="chip" onclick="insertChip('MPCB CTE compliance order issued.')">✓ Pollution CTE Granted</span>
+        <span class="chip" onclick="insertChip('Land survey number mismatch.')">✗ Survey No Mismatch</span>
+        <span class="chip" onclick="insertChip('Outstanding departmental dues pending.')">✗ Unpaid Dues</span>
+      </div>
+      <label for="modalRemarksInput">Admin Review Remarks:</label>
+      <textarea id="modalRemarksInput" placeholder="Enter remarks or justification for approval/rejection..."></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button class="btn-details" onclick="closeModal()">Cancel</button>
+      <button class="btn-reject" onclick="execReview('REJECTED')">✗ Reject Application</button>
+      <button class="btn-approve" onclick="execReview('APPROVED')">✓ Approve Application</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const PORTAL_BASE = '';
+  let adminToken = '';
+  let allApps = [];
+  let currentDept = 'ALL';
+  let currentView = 'table';
+  let selectedRefNos = new Set();
+  let activeRefNo = null;
+
+  // ── AUTH & INIT ───────────────────────────────────────────────────────────
+  async function doAdminLogin() {
+    const pw = document.getElementById('adminPasswordInput').value.trim();
+    if (!pw) { showErr('loginErr', 'Please enter the admin password.'); return; }
+    try {
+      const r = await fetch(`${PORTAL_BASE}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      const data = await r.json();
+      if (data.success) {
+        adminToken = data.token;
+        sessionStorage.setItem('samanvay_admin_token', adminToken);
+        showAdminUI();
+      } else {
+        showErr('loginErr', data.message || 'Login failed.');
+      }
+    } catch (e) {
+      showErr('loginErr', 'Cannot connect to portal server.');
+    }
+  }
+
+  function doAdminLogout() {
+    adminToken = '';
+    sessionStorage.removeItem('samanvay_admin_token');
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminTopbar').style.display = 'none';
+    document.getElementById('adminWrap').classList.remove('active');
+  }
+
+  let socket = null;
+  function setupRealtimeSocket() {
+    if (socket) return;
+    try {
+      socket = io();
+      socket.on('applicationSubmitted', (data) => {
+        showToast(`⚡ New application submitted to ${data.department}!`, 'success');
+        loadApplications();
+      });
+      socket.on('applicationUpdated', (data) => {
+        loadApplications();
+      });
+    } catch(e) {}
+  }
+
+  function showAdminUI() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminTopbar').style.display = 'flex';
+    document.getElementById('adminWrap').classList.add('active');
+    setupRealtimeSocket();
+    loadApplications();
+    setInterval(loadApplications, 6000);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = sessionStorage.getItem('samanvay_admin_token');
+    if (saved) { adminToken = saved; showAdminUI(); }
+  });
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    document.getElementById('themeBtn').innerText = isDark ? '☀️ Light' : '🌙 Dark';
+  }
+
+  // ── DATA FETCH & STATS ───────────────────────────────────────────────────
+  async function loadApplications() {
+    const url = `${PORTAL_BASE}/api/admin/applications`;
+    try {
+      await loadDynamicDeptTabs();
+      const r = await fetch(url, { headers: { 'x-admin-token': adminToken } });
+      const data = await r.json();
+      if (!data.success) return;
+      allApps = data.applications || [];
+      updateCounts(allApps);
+      applyFilter();
+    } catch (e) {
+      console.warn('Load apps error:', e.message);
+    }
+  }
+
+  function updateCounts(apps) {
+    document.getElementById('statTotal').textContent = apps.length;
+    const pending = apps.filter(a => a.status === 'PENDING').length;
+    const approved = apps.filter(a => a.status === 'APPROVED').length;
+    const rejected = apps.filter(a => a.status === 'REJECTED').length;
+
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statApproved').textContent = approved;
+    document.getElementById('statRejected').textContent = rejected;
+
+    document.getElementById('livePendingBadge').textContent = `${pending} PENDING`;
+    document.getElementById('livePendingBadge').style.background = pending > 0 ? '#f59e0b' : '#10b981';
+
+    // Tab counts
+    document.getElementById('cntALL').textContent = apps.length;
+    document.querySelectorAll('.dept-tab').forEach(t => {
+      const d = t.getAttribute('data-dept');
+      if (d && d !== 'ALL') {
+        const badge = document.getElementById(`cnt${d}`);
+        if (badge) badge.textContent = apps.filter(a => a.department === d).length;
+      }
+    });
+  }
+
+  async function loadDynamicDeptTabs() {
+    try {
+      const res = await fetch(`${PORTAL_BASE}/api/admin/departments`);
+      const data = await res.json();
+      if (data.success && data.departments) {
+        const tabsContainer = document.querySelector('.dept-tabs');
+        if (!tabsContainer) return;
+        
+        let html = `
+          <button class="dept-tab ${currentDept === 'ALL' ? 'active' : ''}" data-dept="ALL" onclick="switchDept('ALL', this)">
+            📋 All Departments <span class="cnt-badge" id="cntALL">0</span>
+          </button>
+        `;
+        
+        data.departments.forEach(d => {
+          const code = d.dept_code.toUpperCase();
+          const icon = code === 'LAND' ? '🏞️' : (code === 'ELECTRICITY' ? '⚡' : (code === 'POLLUTION' ? '🌿' : '🏛️'));
+          html += `
+            <button class="dept-tab ${currentDept === code ? 'active' : ''}" data-dept="${code}" onclick="switchDept('${code}', this)">
+              ${icon} ${d.dept_name} <span class="cnt-badge" id="cnt${code}">0</span>
+            </button>
+          `;
+        });
+        
+        tabsContainer.innerHTML = html;
+        updateTabCounts();
+      }
+    } catch(e) {}
+  }
+
+  function switchDept(dept, btn) {
+    currentDept = dept;
+    document.querySelectorAll('.dept-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    const status = document.getElementById('filterStatus').value;
+    const search = document.getElementById('filterSearch').value.toLowerCase();
+
+    const filtered = allApps.filter(a => {
+      const matchDept = currentDept === 'ALL' || a.department === currentDept;
+      const matchStatus = !status || a.status === status;
+      const matchSearch = !search ||
+        a.citizen_name.toLowerCase().includes(search) ||
+        a.citizen_pan.toLowerCase().includes(search) ||
+        a.ref_no.toLowerCase().includes(search) ||
+        a.project_name.toLowerCase().includes(search);
+
+      return matchDept && matchStatus && matchSearch;
+    });
+
+    renderTable(filtered);
+    renderCards(filtered);
+  }
+
+  // ── RENDER TABLE VIEW ─────────────────────────────────────────────────────
+  function renderTable(apps) {
+    const tbody = document.getElementById('appTableBody');
+    if (!apps.length) {
+      tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state">No matching applications found.</div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = apps.map(a => {
+      const submitted = new Date(a.submitted_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+      const deptColor = a.department === 'LAND' ? '#15803d' : a.department === 'ELECTRICITY' ? '#0369a1' : '#b45309';
+      const deptBg = a.department === 'LAND' ? '#dcfce7' : a.department === 'ELECTRICITY' ? '#bae6fd' : '#fef3c7';
+      const isChecked = selectedRefNos.has(a.ref_no) ? 'checked' : '';
+
+      const badgeHtml = a.status === 'APPROVED'
+        ? `<span class="badge badge-approved">✓ APPROVED</span>`
+        : a.status === 'REJECTED'
+        ? `<span class="badge badge-rejected">✗ REJECTED</span>`
+        : a.status === 'BLOCKED'
+        ? `<span class="badge badge-blocked">🔒 BLOCKED</span>`
+        : `<span class="badge badge-pending"><span class="pulse-dot"></span> ⏳ PENDING</span>`;
+
+      const isBlocked = a.status === 'BLOCKED';
+      const remarksText = a.admin_remarks ? `<div style="font-size:0.72rem;color:var(--text-sub);margin-top:2px;">${esc(a.admin_remarks)}</div>` : '';
+
+      return `<tr>
+        <td><input type="checkbox" onchange="toggleSelectRow('${a.ref_no}', this.checked)" ${isChecked} ${isBlocked ? 'disabled' : ''}></td>
+        <td><code style="font-size:0.75rem;font-weight:700;">${esc(a.ref_no)}</code></td>
+        <td><span style="background:${deptBg};color:${deptColor};padding:4px 10px;border-radius:9999px;font-size:0.72rem;font-weight:800;">${a.department}</span></td>
+        <td><strong>${esc(a.citizen_name)}</strong></td>
+        <td><code style="background:rgba(0,0,0,0.05);padding:2px 6px;border-radius:4px;">${esc(a.citizen_pan)}</code></td>
+        <td><strong>${esc(a.project_name)}</strong><div style="font-size:0.72rem;color:var(--text-sub);">${esc(a.project_type)} (${esc(a.district || 'MH')})</div></td>
+        <td style="font-size:0.78rem;color:var(--text-sub);">${submitted}</td>
+        <td>${badgeHtml}${remarksText}</td>
+        <td>
+          <button class="btn-details" onclick="openReviewModal('${a.ref_no}')">Review ➔</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── RENDER CARDS VIEW ─────────────────────────────────────────────────────
+  function renderCards(apps) {
+    const grid = document.getElementById('cardsViewContainer');
+    if (!apps.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No matching applications found.</div>`;
+      return;
+    }
+
+    grid.innerHTML = apps.map(a => {
+      const submitted = new Date(a.submitted_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+      const deptColor = a.department === 'LAND' ? '#15803d' : a.department === 'ELECTRICITY' ? '#0369a1' : '#b45309';
+      const badgeHtml = a.status === 'APPROVED'
+        ? `<span class="badge badge-approved">✓ APPROVED</span>`
+        : a.status === 'REJECTED'
+        ? `<span class="badge badge-rejected">✗ REJECTED</span>`
+        : a.status === 'BLOCKED'
+        ? `<span class="badge badge-blocked">🔒 BLOCKED</span>`
+        : `<span class="badge badge-pending"><span class="pulse-dot"></span> ⏳ PENDING</span>`;
+
+      const isBlocked = a.status === 'BLOCKED';
+
+      return `<div class="app-card" style="${isBlocked ? 'opacity:0.8;background:rgba(0,0,0,0.02);' : ''}">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-weight:800;color:${deptColor};font-size:0.8rem;">${a.department} DEPT</span>
+            ${badgeHtml}
+          </div>
+          <h4 style="font-size:1rem;margin-bottom:4px;color:var(--text-main);">${esc(a.citizen_name)}</h4>
+          <p style="font-size:0.8rem;color:var(--text-sub);margin-bottom:12px;">${esc(a.project_name)} (${esc(a.project_type)})</p>
+          <div style="font-size:0.78rem;line-height:1.6;background:var(--bg-primary);padding:10px;border-radius:8px;">
+            <div><strong>PAN:</strong> <code>${esc(a.citizen_pan)}</code></div>
+            <div><strong>Ref/Survey:</strong> ${esc(a.ref_number || '101')}</div>
+            <div><strong>Submitted:</strong> ${submitted}</div>
+            ${a.admin_remarks ? `<div style="color:${isBlocked ? '#dc2626' : 'var(--accent)'};margin-top:4px;">${esc(a.admin_remarks)}</div>` : ''}
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:8px;">
+          ${isBlocked
+            ? `<div style="font-size:0.75rem;color:#64748b;font-weight:700;padding:8px 0;">🔒 Awaiting Prerequisite Approval</div>`
+            : `<button class="btn-approve" style="flex:1;justify-content:center;" onclick="quickReview('${a.ref_no}', 'APPROVED')">✓ Approve</button>
+               <button class="btn-reject" style="flex:1;justify-content:center;" onclick="quickReview('${a.ref_no}', 'REJECTED')">✗ Reject</button>`
+          }
+          <button class="btn-details" onclick="openReviewModal('${a.ref_no}')">Details</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function switchView(mode) {
+    currentView = mode;
+    document.getElementById('btnViewTable').className = `view-btn ${mode==='table'?'active':''}`;
+    document.getElementById('btnViewCards').className = `view-btn ${mode==='cards'?'active':''}`;
+    document.getElementById('tableViewContainer').style.display = mode === 'table' ? 'block' : 'none';
+    document.getElementById('cardsViewContainer').style.display = mode === 'cards' ? 'grid' : 'none';
+  }
+
+  // ── SELECTION & BULK ACTIONS ─────────────────────────────────────────────
+  function toggleSelectRow(refNo, checked) {
+    if (checked) selectedRefNos.add(refNo);
+    else selectedRefNos.delete(refNo);
+    updateBulkBar();
+  }
+
+  function toggleSelectAll(cb) {
+    if (cb.checked) {
+      allApps.forEach(a => selectedRefNos.add(a.ref_no));
+    } else {
+      selectedRefNos.clear();
+    }
+    applyFilter();
+    updateBulkBar();
+  }
+
+  function updateBulkBar() {
+    const bar = document.getElementById('bulkBar');
+    const cnt = document.getElementById('bulkCount');
+    if (selectedRefNos.size > 0) {
+      bar.classList.add('active');
+      cnt.textContent = `${selectedRefNos.size} selected`;
+    } else {
+      bar.classList.remove('active');
+    }
+  }
+
+  async function confirmBulk(action) {
+    if (!selectedRefNos.size) return;
+    try {
+      const r = await fetch(`${PORTAL_BASE}/api/admin/bulk-review`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ refNos: Array.from(selectedRefNos), action, remarks: `Bulk ${action.toLowerCase()} by admin.` })
+      });
+      const data = await r.json();
+      if (data.success) {
+        showToast(`Bulk ${action.toLowerCase()} successful for ${data.count} applications!`, 'success');
+        selectedRefNos.clear();
+        updateBulkBar();
+        loadApplications();
+      }
+    } catch (e) {
+      showToast('Bulk update failed.', 'error');
+    }
+  }
+
+  // ── MODAL REVIEW ──────────────────────────────────────────────────────────
+  function openReviewModal(refNo) {
+    const app = allApps.find(a => a.ref_no === refNo);
+    if (!app) return;
+    activeRefNo = refNo;
+
+    document.getElementById('modalRefNo').textContent = app.ref_no;
+    document.getElementById('modalDeptLabel').textContent = `${app.department} DEPARTMENT APPLICATION`;
+    document.getElementById('modalApplicantName').textContent = app.citizen_name;
+    document.getElementById('modalPan').textContent = app.citizen_pan;
+    document.getElementById('modalProjectName').textContent = `${app.project_name} (${app.project_type})`;
+    document.getElementById('modalDistrict').textContent = app.district || 'Pune';
+    document.getElementById('modalRefNumber').textContent = app.ref_number || '101';
+    document.getElementById('modalSubmittedAt').textContent = new Date(app.submitted_at).toLocaleString('en-IN');
+    document.getElementById('modalRemarksInput').value = app.admin_remarks || '';
+
+    const badge = document.getElementById('modalStatusBadge');
+    badge.className = `badge badge-${app.status.toLowerCase()}`;
+    badge.textContent = app.status;
+
+    document.getElementById('reviewModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('reviewModal').classList.remove('open');
+    activeRefNo = null;
+  }
+
+  function insertChip(text) {
+    const input = document.getElementById('modalRemarksInput');
+    input.value = (input.value + ' ' + text).trim();
+  }
+
+  async function execReview(action) {
+    if (!activeRefNo) return;
+    const remarks = document.getElementById('modalRemarksInput').value.trim();
+    await quickReview(activeRefNo, action, remarks);
+    closeModal();
+  }
+
+  async function quickReview(refNo, action, remarks = '') {
+    try {
+      const r = await fetch(`${PORTAL_BASE}/api/admin/review`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ refNo, action, remarks: remarks || `Reviewed and ${action.toLowerCase()} by Department Admin.`, reviewedBy: 'Dept Admin' })
+      });
+      const data = await r.json();
+      if (data.success) {
+        showToast(`Application ${refNo} ${action.toLowerCase()} successfully!`, action === 'APPROVED' ? 'success' : 'error');
+        loadApplications();
+      } else {
+        showToast(data.message || 'Review failed.', 'error');
+      }
+    } catch (e) {
+      showToast('Network error updating status.', 'error');
+    }
+  }
+
+  function exportCSV() {
+    if (!allApps.length) { showToast('No data to export.', 'error'); return; }
+    const headers = ['RefNo', 'Department', 'Applicant', 'PAN', 'Project', 'District', 'Status', 'SubmittedAt'];
+    const rows = allApps.map(a => [a.ref_no, a.department, `"${a.citizen_name}"`, a.citizen_pan, `"${a.project_name}"`, a.district, a.status, a.submitted_at]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `samanvay_applications_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  async function autoApproveAllPending() {
+    showToast('⚡ Auto-Approving Sequential Waves for Video Demo...', 'success');
+
+    const land = allApps.find(a => a.department === 'LAND' && a.status === 'PENDING');
+    if (land) {
+      await quickReview(land.ref_no, 'APPROVED', '✓ Land 7/12 title extract verified.');
+      await new Promise(r => setTimeout(r, 1200));
+      await loadApplications();
+    }
+
+    const elec = allApps.find(a => a.department === 'ELECTRICITY' && (a.status === 'PENDING' || a.status === 'BLOCKED'));
+    if (elec) {
+      await quickReview(elec.ref_no, 'APPROVED', '✓ MSEDCL HT 11kV Feeder load sanctioned.');
+      await new Promise(r => setTimeout(r, 1200));
+      await loadApplications();
+    }
+
+    const poll = allApps.find(a => a.department === 'POLLUTION' && (a.status === 'PENDING' || a.status === 'BLOCKED'));
+    if (poll) {
+      await quickReview(poll.ref_no, 'APPROVED', '✓ MPCB Consent to Establish (CTE) granted.');
+      await new Promise(r => setTimeout(r, 1200));
+      await loadApplications();
+    }
+
+    showToast('🎉 All Sequential Waves Auto-Approved Successfully!', 'success');
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function showErr(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (type ? ' ' + type : '');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+
+  function esc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+/* ================================================================
+   MAHARASHTRA BHUMI ABHILEKH (MAHABHULEKH / महाभूमी) STYLESHEET
+   Government of Maharashtra · Revenue & Forest Department
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --mb-maroon: #800000;
+  --mb-maroon-dark: #5a0000;
+  --mb-gold: #c59b27;
+  --mb-gold-light: #fff8e7;
+  --mb-green: #1a5632;
+  --mb-green-dark: #0f3820;
+  --mb-saffron: #ff9933;
+  --mb-bg: #f8faf9;
+  --mb-surface: #ffffff;
+  --mb-border: #d6e0db;
+  --mb-border-dark: #a8b8b0;
+  --mb-text: #1a2a22;
+  --mb-text-muted: #566a60;
+  --mb-radius: 6px;
+  --mb-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --mb-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --font-base: 'Mukta', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-base);
+  background: var(--mb-bg);
+  color: var(--mb-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TRICOLOR STRIPE */
+.mb-tricolor {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%);
+}
+
+/* TOP ACCESSIBILITY & GOV BAR */
+.mb-topbar {
+  background: #212529;
+  color: #e9ecef;
+  font-size: 0.82rem;
+  padding: 6px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mb-topbar a {
+  color: #dee2e6;
+  text-decoration: none;
+  margin: 0 4px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+.mb-topbar a:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* MAIN HEADER */
+.mb-header {
+  background: linear-gradient(135deg, #780000 0%, #4a0000 100%);
+  color: #ffffff;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  position: relative;
+  border-bottom: 3px solid var(--mb-gold);
+}
+.mb-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.mb-emblem {
+  font-size: 2.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.mb-header-titles h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+.mb-header-titles p {
+  font-size: 0.88rem;
+  color: #ffdda1;
+  margin-top: 2px;
+  font-weight: 500;
+}
+.mb-header-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.mb-header-badge span {
+  color: #ffd700;
+  font-weight: 700;
+  display: block;
+}
+
+/* NAVIGATION TABS */
+.mb-nav {
+  background: #ffffff;
+  border-bottom: 2px solid var(--mb-border);
+  padding: 0 32px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.mb-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  color: #495057;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.mb-nav a:hover {
+  color: var(--mb-maroon);
+  background: #fdfaf7;
+}
+.mb-nav a.active {
+  color: var(--mb-maroon);
+  border-bottom-color: var(--mb-maroon);
+  background: #fff8f5;
+  font-weight: 700;
+}
+.mb-nav a .badge {
+  background: var(--mb-maroon);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+}
+
+/* MAIN CONTAINER */
+.mb-container {
+  max-width: 1240px;
+  width: 100%;
+  margin: 24px auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+/* HERO DIVISION SELECTOR */
+.mb-division-box {
+  background: #ffffff;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--mb-shadow);
+}
+.mb-division-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--mb-maroon);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mb-division-subtitle {
+  font-size: 0.88rem;
+  color: var(--mb-text-muted);
+  margin-bottom: 16px;
+}
+.mb-division-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.mb-division-card {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius);
+  padding: 12px 14px;
+  background: #fbfdfc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.mb-division-card:hover {
+  border-color: var(--mb-maroon);
+  background: #fff8f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(120, 0, 0, 0.1);
+}
+.mb-division-card.selected {
+  border-color: var(--mb-maroon);
+  background: #fff4ef;
+  border-width: 2px;
+}
+.mb-division-card.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: var(--mb-maroon);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.mb-division-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--mb-text);
+}
+.mb-division-sub {
+  font-size: 0.78rem;
+  color: var(--mb-text-muted);
+  margin-top: 2px;
+}
+
+/* CARDS */
+.mb-card {
+  background: #ffffff;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius);
+  box-shadow: var(--mb-shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.mb-card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid var(--mb-border);
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--mb-maroon);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mb-card-body {
+  padding: 20px;
+}
+
+/* FORM ELEMENTS */
+.mb-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.mb-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.mb-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mb-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--mb-text);
+}
+.mb-label .req { color: #dc3545; }
+.mb-select, .mb-input {
+  padding: 9px 12px;
+  border: 1px solid #ced4da;
+  border-radius: var(--mb-radius);
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: #ffffff;
+  color: #212529;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.mb-select:focus, .mb-input:focus {
+  border-color: var(--mb-maroon);
+  box-shadow: 0 0 0 3px rgba(120, 0, 0, 0.15);
+}
+
+/* RADIO SEARCH SELECTOR */
+.mb-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 16px;
+  background: #f8faf9;
+  border: 1px solid #e2ece7;
+  border-radius: var(--mb-radius);
+  margin-bottom: 16px;
+}
+.mb-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mb-radio-label input[type="radio"] {
+  accent-color: var(--mb-maroon);
+  width: 16px;
+  height: 16px;
+}
+
+/* BUTTONS */
+.mb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: var(--mb-radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.mb-btn-primary {
+  background: var(--mb-maroon);
+  color: #ffffff;
+}
+.mb-btn-primary:hover {
+  background: var(--mb-maroon-dark);
+  box-shadow: 0 4px 12px rgba(120, 0, 0, 0.25);
+}
+.mb-btn-secondary {
+  background: #e9ecef;
+  color: #495057;
+}
+.mb-btn-secondary:hover {
+  background: #dee2e6;
+}
+.mb-btn-outline {
+  background: #ffffff;
+  border: 1px solid var(--mb-maroon);
+  color: var(--mb-maroon);
+}
+.mb-btn-outline:hover {
+  background: #fff4ef;
+}
+
+/* ================================================================
+   OFFICIAL 7/12 (सातबारा) CERTIFICATE STYLING (MAHABHULEKH FORMAT)
+   ================================================================ */
+.satbara-sheet {
+  background: #ffffff;
+  border: 2px solid #333333;
+  padding: 24px;
+  margin-top: 20px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+.satbara-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: rgba(120, 0, 0, 0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.satbara-header {
+  text-align: center;
+  border-bottom: 2px solid #222;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+.satbara-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #000;
+}
+.satbara-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #222;
+  margin-top: 2px;
+}
+.satbara-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: #fdfdfd;
+  border: 1px solid #ddd;
+}
+.satbara-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+}
+.satbara-table th, .satbara-table td {
+  border: 1px solid #333;
+  padding: 8px 10px;
+  vertical-align: top;
+}
+.satbara-table th {
+  background: #f0f0f0;
+  font-weight: 700;
+  text-align: center;
+}
+.satbara-digital-sign {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed #666;
+  font-size: 0.82rem;
+}
+.satbara-seal-box {
+  border: 1px solid #1a5632;
+  background: #f4faf6;
+  padding: 8px 14px;
+  border-radius: 4px;
+  color: #1a5632;
+  font-weight: 600;
+}
+
+/* QUICK PRESETS PILLS */
+.mb-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.mb-pill {
+  background: #eef4f1;
+  border: 1px solid #ccdcd4;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1a5632;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.mb-pill:hover {
+  background: #dbeef3;
+  border-color: #a0cdd7;
+}
+
+/* FOOTER */
+.mb-footer {
+  background: #1e2420;
+  color: #adb5bd;
+  font-size: 0.82rem;
+  padding: 24px 32px;
+  text-align: center;
+  margin-top: auto;
+  border-top: 3px solid var(--mb-gold);
+}
+.mb-footer p { margin: 4px 0; }
+.mb-footer a { color: #f8f9fa; text-decoration: none; }
+
+/* PRINT STYLES */
+@media print {
+  .mb-topbar, .mb-header, .mb-nav, .mb-division-box, .mb-card, .mb-footer, #searchCard, .no-print {
+    display: none !important;
+  }
+  body, .mb-container {
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+  }
+  .satbara-sheet {
+    border: 2px solid #000;
+    box-shadow: none;
+    margin: 0;
+    padding: 10px;
+    page-break-inside: avoid;
+  }
+}
+
+/* ── Samanvay hand-off (arrival banner + return panel) ───────────────────── */
+.mb-handoff {
+  background: #eef6f1;
+  border: 1px solid #9cc9ae;
+  border-left: 5px solid var(--mb-green);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  color: var(--mb-text);
+}
+.mb-handoff[hidden] { display: none; }
+.mb-handoff-title { font-weight: 800; color: var(--mb-green-dark); margin-bottom: 8px; }
+.mb-handoff-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 0.9rem; }
+.mb-handoff-steps .done { color: var(--mb-green); }
+.mb-handoff-steps .current { font-weight: 700; color: var(--mb-maroon); }
+.mb-handoff-msg { margin-top: 8px; font-size: 0.85rem; }
+.mb-handoff-return { margin-top: 14px; border-left-color: var(--mb-saffron); background: #fff8e7; border-color: #f0d38a; }
+.mb-handoff-return p { margin: 0 0 12px; font-size: 0.9rem; }

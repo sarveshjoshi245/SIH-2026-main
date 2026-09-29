@@ -1,0 +1,16 @@
+{
+  "name": "land-department-api",
+  "version": "1.0.0",
+  "description": "Simulated legacy Land Records Department API — the MVP building block for the Government Interoperability Layer (SIH project)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.23.0"
+  }
+}
